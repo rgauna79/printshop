@@ -8,10 +8,10 @@
             
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Prodcut List</h1>
+                    <h1>Color List</h1>
                 </div>
                 <div class="col-sm-6">
-                    <a href="{{ url('admin/product/add')}}" class="btn btn-primary float-sm-right">Add new product</a>
+                    <a href="{{ url('admin/color/add')}}" class="btn btn-primary float-sm-right">Add new color</a>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
                     @include('admin.layouts._message')
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Product List</h3>
+                            <h3 class="card-title">Color List</h3>
                         </div>
                         
                         <div class="card-body p-0">
@@ -34,6 +34,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
+                                        <th>Code</th>
                                         <th>Created by</th>
                                         <th>Status</th>
                                         <th>Created Date</th>
@@ -42,24 +43,22 @@
                                 </thead>
                                 <tbody>
                                     @foreach($getRecord as $value)
-                                        <tr>
-                                            <td>{{ $value->id }}</td>
-                                            <td>{{ $value->title }}</td>
-                                            <td>{{ $value->created_by_name }}</td>
-                                            <td>{{ ($value->status == 0) ? 'Active' : 'Inactive' }}</td>
-                                            <td>{{ date('m-d-Y', strtotime($value->created_at)) }}</td>
-                                            <td>
-                                                <a href="{{ url('admin/product/edit/'.$value->id)}}" class="btn btn-primary ">Edit</a>
-                                                <a href="{{ url('admin/product/delete/'.$value->id)}}" class="btn btn-danger ">Delete</a>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>{{ $value->id }}</td>
+                                        <td>{{ $value->name }}</td>
+                                        <td>{{ $value->code }}</td>
+                                        <td>{{ $value->created_by_name }}</td>
+                                        <td>{{ ($value->status == 0) ? 'Active' : 'Inactive' }}</td>
+                                        <td>{{ date('m-d-Y', strtotime($value->created_at)) }}</td>
+
+                                        <td>
+                                            <a href="{{ url('admin/color/edit/'.$value->id)}}" class="btn btn-primary ">Edit</a>
+                                            <a href="{{ url('admin/color/delete/'.$value->id)}}" class="btn btn-danger ">Delete</a>
+                                        </td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div style="padding: 10px; float: right;">
-                                {!! $getRecord->appends(Illuminate\Support\Facades\Request::except('page'))->
-                                links() !!}
-                            </div>
                         </div>
                         
                     </div>

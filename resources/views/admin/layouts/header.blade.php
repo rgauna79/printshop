@@ -12,7 +12,7 @@
     <ul class="navbar-nav ml-auto">
 
 
-      <!-- Messages Dropdown Menu -->
+      {{-- <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
@@ -96,7 +96,7 @@
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
-      </li>
+      </li> --}}
 
 
     </ul>
@@ -119,7 +119,10 @@
           <img src="{{ url('public/assets/dist/img/avatar5.png')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a class="d-block">{{ Auth::user()->name }}</a>
+          @php
+          $id =  Auth::user()->id;    
+          @endphp
+          <a href="{{ url('admin/admin/edit/'.$id) }}"class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
 
@@ -173,6 +176,16 @@
                 <i class="nav-icon fas fa-list-alt"></i>
               <p>
                 Brand
+                <span class="badge badge-info right"></span>
+              </p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ url('admin/color/list')}}" class="nav-link @if (Request::segment(2) == 'color') active @endif">
+                <i class="nav-icon fas fa-list-alt"></i>
+              <p>
+                Color
                 <span class="badge badge-info right"></span>
               </p>
             </a>
