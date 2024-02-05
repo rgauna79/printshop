@@ -11,6 +11,21 @@ class SubCategoryModel extends Model
 
     protected $table = 'sub_category';
 
+    static public function getSingle($id)
+    {
+        return self::find($id);
+
+    }
+
+    static public function getSingleSlug($slug)
+    {
+        return self::where('slug', '=', $slug)
+                    ->where('sub_category.is_deleted', '=', 0)
+                    ->where('sub_category.status', '=', 0)
+                    ->first();
+
+    }
+    
     static public function getRecord()
     {
         return self::select('sub_category.*','users.name as created_by_name',
@@ -33,12 +48,6 @@ class SubCategoryModel extends Model
                 ->orderBy('sub_category.name', 'asc')
                 ->get();
                 
-    }
-
-    static public function getSingle($id)
-    {
-        return self::find($id);
-
     }
 
 }
