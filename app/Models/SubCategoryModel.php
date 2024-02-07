@@ -50,4 +50,12 @@ class SubCategoryModel extends Model
                 
     }
 
+    public function TotalProduct()
+    {
+        return $this->hasMany(ProductModel::class, 'sub_category_id')
+                    ->where('product.is_deleted', '=', 0)
+                    ->where('product.status', '=', 0)
+                    ->count();
+    }
+
 }

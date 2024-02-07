@@ -18,8 +18,10 @@
     <link rel="stylesheet" href="{{ url('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url('assets/css/plugins/owl-carousel/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ url('assets/css/plugins/magnific-popup/magnific-popup.css') }}">
+
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
+    @yield('style')
 </head>
 
 <body>
@@ -162,8 +164,11 @@
     <script src="{{ url('assets/js/superfish.min.js')}}"></script>
     <script src="{{ url('assets/js/owl.carousel.min.js')}}"></script>
     <script src="{{ url('assets/js/jquery.magnific-popup.min.js')}}"></script>
+    @yield('scripts')
     <!-- Main JS File -->
     <script src="{{ url('assets/js/main.js')}}"></script>
+
+    
 </body>
 
 
