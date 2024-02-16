@@ -56,6 +56,19 @@ class ProductModel extends Model
                         $sub_category_id_array = explode(",", $sub_category_id);
                         $return = $return->whereIn('product.sub_category_id', $sub_category_id_array);
                     }
+                    else
+                    {
+                        if (!empty(request()->get('old_category_id')))
+                        {
+                             $return = $return->where('product.category_id', '=', request()->get('old_category_id'));
+                            
+                        }
+                        if (!empty(request()->get('old_sub_category_id')))
+                        {
+                            $return = $return->where('product.sub_category_id', '=', request()->get('old_sub_category_id'));
+                            
+                        }
+                    }
 
                     if(!empty(request()->get('color_id')))
                     {
@@ -73,11 +86,21 @@ class ProductModel extends Model
                         $return = $return->whereIn('product.brand_id', $brand_id_array);
                     }
 
+                    if(!empty(request()->get('start_price')) && !empty(request()->get('end_price')))
+                    {
+                        $start_price = str_replace('$', '', request()->get('start_price') );
+                        $end_price = str_replace('$', '', request()->get('end_price') );
+
+                        $return = $return->where('product.price', '>=', $start_price);
+                        $return = $return->where('product.price', '<=', $end_price);
+                    
+                    }
+
                     $return = $return->where('product.is_deleted', '=', 0)
                     ->where('product.status', '=', 0)
                     ->groupBy('product.id')
                     ->orderBy('product.id','desc')
-                    ->paginate(20);
+                    ->paginate(3);
 
         return $return;
     }

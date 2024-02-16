@@ -40,7 +40,7 @@
                     <div class="toolbox">
                         <div class="toolbox-left">
                             <div class="toolbox-info">
-                                Showing <span>9 of 56</span> Products
+                                Showing <span>{{ $getProduct->perPage() }} of {{ $getProduct->total() }}</span> Products
                             </div>
                         </div>
 
@@ -62,15 +62,32 @@
                     <div id="getProductAjax">
                         @include('product._list')
                     </div>
+                    <div class="text-center">
+                        <a href="javascript:;" 
+                            @if (empty($page)) style="display:none;"@endif    
+                            data-page="{{ $page }}" 
+                            class="btn btn-primary LoadMore">
+                            Load More
+                        </a>
+
+                    </div>
                 </div>
                 <aside class="col-lg-3 order-lg-first">
 
                     <form id="FilterForm" mehot="post" action="">
                         {{ csrf_field() }}
+                        <input type="hidden" name="old_category_id" 
+                            value="{{ !empty($getCategory) ? $getCategory->id : '' }}">
+                        <input type="hidden" name="old_sub_category_id" 
+                            {{-- id="{{ $getSubCategory->name}}" --}}
+                            value="{{ !empty($getSubCategory) ? $getSubCategory->id : '' }}">
+
                         <input type="hidden" name="sub_category_id" id="get_sub_category_id">
                         <input type="hidden" name="brand_id" id="get_brand_id">
                         <input type="hidden" name="color_id" id="get_color_id">
                         <input type="hidden" name="sort_by_id" id="get_sort_by_id">
+                        <input type="hidden" name="start_price" id="get_start_price">
+                        <input type="hidden" name="end_price" id="get_end_price">
                     </form>
 
                     <div class="sidebar sidebar-shop">
@@ -302,21 +319,110 @@
             FilterForm();
         })
 
+        var xhr;
+
         function FilterForm()
         {
-            $.ajax({
+            if (xhr && xhr.readyState != 4) {
+                xhr.abort();
+            }
+            xhr = $.ajax({
                 type: "POST",
                 url: "{{ url('get_filter_product_ajax') }}",
+                
                 data: $('#FilterForm').serialize() ,
                 dataType: "json",
                 success:  function(data){
-                    $('#getProductAjax').html(data.success)
+                    $('#getProductAjax').html(data.success);
+                    
+                    $('.LoadMore').attr('data-page', data.page);
+
+                    if(data.page == 0)
+                    {
+                        $('.LoadMore').hide();
+                    }
+                    else
+                    {
+                        $('.LoadMore').show(); 
+                    }
                 },
                 error: function(data){
 
                 }
             });
         }
+    
+        $('body').delegate('.LoadMore', 'click', function() {
+            var page = $(this).attr('data-page');
 
+            $('.LoadMore').html('Loading ...');
+
+            if (xhr && xhr.readyState != 4) {
+                xhr.abort();
+            }
+            xhr = $.ajax({
+                type: "POST",
+                url: "{{ url('get_filter_product_ajax') }}?page="+page,
+                data: $('#FilterForm').serialize() ,
+                dataType: "json",
+                success:  function(data){
+                    $('#getProductAjax').append(data.success);
+                    $('.LoadMore').html('Load More');
+                    $('.LoadMore').attr('data-page', data.page);
+
+                    if(data.page == 0)
+                    {
+                        $('.LoadMore').hide();
+                    }
+                    else
+                    {
+                        $('.LoadMore').show(); 
+                    }
+                },
+                error: function(data){
+
+                }
+            });
+        });
+
+        var i = 0;
+
+        if ( typeof noUiSlider === 'object' ) {
+            var priceSlider  = document.getElementById('price-slider');
+
+            noUiSlider.create(priceSlider, {
+                start: [ 0, 1000 ],
+                connect: true,
+                step: 1,
+                margin: 1,
+                range: {
+                    'min': 0,
+                    'max': 1000
+                },
+                tooltips: true,
+                format: wNumb({
+                    decimals: 0,
+                    prefix: '$'
+                })
+            });
+
+            priceSlider.noUiSlider.on('update', function( values, handle ){
+                var start_price = values[0];
+                var end_price = values[1];
+                $('#get_start_price').val(start_price);
+                $('#get_end_price').val(end_price);
+                $('#filter-price-range').text(values.join(' - '));
+                
+                if (i == 0 || i == 1)
+                {
+                    i++;
+                }
+                else
+                {
+                    FilterForm();
+
+                }
+            });
+	}
     </script>
 @endsection
