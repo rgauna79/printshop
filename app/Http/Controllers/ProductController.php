@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BrandModel;
+use App\Models\CartModel;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\SubCategoryModel;
@@ -14,6 +15,7 @@ class ProductController extends Controller
 {
     public function getProductSearch(Request $request)
     {
+        
         // dd( $data['getSubCategoryFilter']);
         $data['meta_title'] =  'Search';
         $data['meta_description'] = "";
@@ -44,7 +46,8 @@ class ProductController extends Controller
     public function getCategory($slug, $subSlug = '')
     {
         $getProductSingle = ProductModel::getSingleSlug($slug);
-
+        $cart = CartModel::getCart();
+        $data['cart'] = $cart;
 
         $getCategory = CategoryModel::getSingleSlug($slug);
         $getSubCategory = SubCategoryModel::getSingleSlug($subSlug);

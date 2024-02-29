@@ -102,60 +102,59 @@
                         </div>
                     </form>
                 </div>
-
+                
                 <div class="dropdown cart-dropdown">
+                    {{-- {{ $cart }} --}}
                     <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                         <i class="icon-shopping-cart"></i>
-                        <span class="cart-count">2</span>
+                        <span class="cart-count"> {{ !empty($cart) ? count($cart) : "" }}</span>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-cart-products">
+                            @php
+                                $total = 0; // Initialize total variable
+                            @endphp
+                            @if(!empty($cart))
+                            @foreach ($cart as $value)
+                            @php
+                                $image = App\Models\ProductModel::getImageSingle($value['id']);
+                                $product = App\Models\ProductModel::getSingle($value['id']);
+                            @endphp
+                            
                             <div class="product">
                                 <div class="product-cart-details">
                                     <h4 class="product-title">
-                                        <a href="product.html">Beige knitted elastic runner shoes</a>
+
+                                        <a href="product.html">{{ $product->title }}</a>
                                     </h4>
 
                                     <span class="cart-product-info">
-                                        <span class="cart-product-qty">1</span>
-                                        x $84.00
+                                        <span class="cart-product-qty">{{ $value['quantity'] }}</span>
+                                        x ${{ number_format($value['price'], 2) }} 
                                     </span>
                                 </div>
-
+                                
                                 <figure class="product-image-container">
                                     <a href="product.html" class="product-image">
-                                        <img src="assets/images/products/cart/product-1.jpg" alt="product">
+                                        <img src="{{ url($image->getImageUrl()) }}" alt="product">
                                     </a>
                                 </figure>
+                                
                                 <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                             </div>
-
-                            <div class="product">
-                                <div class="product-cart-details">
-                                    <h4 class="product-title">
-                                        <a href="product.html">Blue utility pinafore denim dress</a>
-                                    </h4>
-
-                                    <span class="cart-product-info">
-                                        <span class="cart-product-qty">1</span>
-                                        x $76.00
-                                    </span>
-                                </div>
-
-                                <figure class="product-image-container">
-                                    <a href="product.html" class="product-image">
-                                        <img src="assets/images/products/cart/product-2.jpg" alt="product">
-                                    </a>
-                                </figure>
-                                <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                            </div>
+                            @php
+                                // Update total price with each item's price multiplied by its quantity
+                                $total += $value['price'] * $value['quantity'];
+                            @endphp
+                            @endforeach
+                            @endif
                         </div>
 
                         <div class="dropdown-cart-total">
                             <span>Total</span>
 
-                            <span class="cart-total-price">$160.00</span>
+                            <span class="cart-total-price">${{ number_format($total, 2) }}</span>
                         </div>
 
                         <div class="dropdown-cart-action">
