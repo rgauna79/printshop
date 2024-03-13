@@ -19,6 +19,21 @@ class AuthController extends Controller
         return view('admin.auth.login');
     }
 
+    public function login_user(Request $request)
+    {
+        //  dd($request->all());
+        $remember = !empty($request->singin_remember) ? true : false;
+        if(Auth::attempt(['email' => $request->singin_email, 'password' => $request->singin_password, 'is_admin' => 0, 'status' => 0, 'is_deleted' => 0], $remember))
+        {
+            
+            return redirect('/');
+        }
+        else
+        {
+            return redirect()->back()->with('error', "Incorrect email or password ");
+        }
+    }
+
     public function auth_login_admin(Request $request)
     {
         $remember = !empty($request->remember) ? true : false;
@@ -38,5 +53,11 @@ class AuthController extends Controller
     {
         Auth::logout();
         return redirect('admin');
+    }
+
+    public function logout_user()
+    {
+        Auth::logout();
+        return redirect('/');
     }
 }

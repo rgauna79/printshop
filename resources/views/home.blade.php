@@ -78,6 +78,7 @@
                             <span class="slider-loader"></span><!-- End .slider-loader -->
                         </div><!-- End .intro-slider-container -->
                     </div><!-- End .col-lg-8 -->
+                    
                     <div class="col-lg-4">
                         <div class="intro-banners">
                             <div class="row row-sm">

@@ -103,7 +103,8 @@
                                                 <select name="size_id" id="size" class="form-control">
                                                     <option value="#" selected="selected">Select a size</option>
                                                     @foreach ($getProduct->getSize as $size)
-                                                        <option data-price="{{ $size->price }}" value="{{ $size->id }}">
+                                                        <option data-price="{{ $size->price }}"
+                                                            value="{{ $size->id }}">
                                                             {{ $size->name }}
                                                             @if (!empty($size->price))
                                                                 (${{ number_format($size->price, 2) }})
@@ -112,27 +113,27 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                        </div>
                                     @endif
-                            </div>
 
-                            <div class="details-filter-row details-row-size">
-                                <label for="qty">Qty:</label>
-                                <div class="product-details-quantity">
-                                    <input name="qty" type="number" id="qty" class="form-control" value="1"
-                                        min="1" max="100" step="1" data-decimals="0" required>
-                                </div>
-                            </div>
+                                    <div class="details-filter-row details-row-size">
+                                        <label for="qty">Qty:</label>
+                                        <div class="product-details-quantity">
+                                            <input name="qty" type="number" id="qty" class="form-control" value="1"
+                                                min="1" max="100" step="1" data-decimals="0" required>
+                                        </div>
+                                    </div>
 
-                            <div class="product-details-action">
-                                <button type="submit" class="btn-product btn-cart">ADD TO CART</button>
+                                    <div class="product-details-action">
+                                        <button type="submit" class="btn-product btn-cart">ADD TO CART</button>
 
-                                <div class="details-action-wrapper">
-                                    <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to
-                                            Wishlist</span></a>
-                                    {{-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> --}}
-                                </div>
-                            </div>
-                            </form>
+                                        <div class="details-action-wrapper">
+                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to
+                                                    Wishlist</span></a>
+                                            {{-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> --}}
+                                        </div>
+                                    </div>
+                                </form>
                             <div class="product-details-footer">
                                 <div class="product-cat">
                                     <span>Category:</span>

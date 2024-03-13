@@ -5,7 +5,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="widget widget-about">
                         <img src="{{ url('assets/images/logo-footer.png') }}" class="footer-logo" alt="Footer Logo" width="105" height="25">
-                        <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
+                        <p>Magic Print is an innovative and creative company. </p>
 
                         <div class="social-icons">
                             <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
@@ -21,8 +21,8 @@
                     <div class="widget">
                         <h4 class="widget-title">Useful Links</h4>
                         <ul class="widget-list">
-                            <li><a href="{{ url('about')}}">About Molla</a></li>
-                            <li><a href="#">How to shop on Molla</a></li>
+                            <li><a href="{{ url('about')}}">About Magic Print</a></li>
+                            <li><a href="#">How to shop on Magic Print</a></li>
                             <li><a href="#">FAQ</a></li>
                             <li><a href="{{ url('contact')}}">Contact us</a></li>
                             <li><a href="#signin-modal" data-toggle="modal">Log in</a></li>
@@ -63,7 +63,7 @@
 
     <div class="footer-bottom">
         <div class="container">
-            <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p><!-- End .footer-copyright -->
+            <p class="footer-copyright">Copyright © {{ date('Y') }} Magic Print. All Rights Reserved.</p><!-- End .footer-copyright -->
             <figure class="footer-payments">
                 <img src="{{ url('assets/images/payments.png')}}" alt="Payment methods" width="272" height="20">
             </figure>

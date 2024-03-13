@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{ !empty($meta_title) ? $meta_title.'- Magic Print' : 'Magic Print' }}</title>
+    <title>{{ !empty($meta_title) ? $meta_title.' - Magic Print' : 'Magic Print' }}</title>
     @if(!empty($meta_keywords))
     <meta name="keywords" content="{{ $meta_keywords }}">
     @endif
@@ -66,15 +66,21 @@
                             </ul>
                             <div class="tab-content" id="tab-content-5">
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                                    <form action="#">
+                                    @if(session('error'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ session('error') }}
+                                    </div>
+                                    @endif
+                                    <form action="" method="post">
+                                        {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label for="singin-email">Username or email address *</label>
-                                            <input type="text" class="form-control" id="singin-email" name="singin-email" required>
+                                            <label for="singin_email">Username or email address *</label>
+                                            <input type="text" class="form-control" id="singin_email" name="singin_email" required>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="singin-password">Password *</label>
-                                            <input type="password" class="form-control" id="singin-password" name="singin-password" required>
+                                            <label for="singin_password">Password *</label>
+                                            <input type="password" class="form-control" id="singin_password" name="singin_password" required>
                                         </div>
 
                                         <div class="form-footer">
@@ -84,8 +90,8 @@
                                             </button>
 
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="signin-remember">
-                                                <label class="custom-control-label" for="signin-remember">Remember Me</label>
+                                                <input type="checkbox" class="custom-control-input" id="signin_remember">
+                                                <label class="custom-control-label" for="signin_remember">Remember Me</label>
                                             </div>
                                             <a href="#" class="forgot-link">Forgot Your Password?</a>
                                         </div>
@@ -93,16 +99,28 @@
 
                                 </div>
                                 <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                    <form action="#">
+                                    @if(session('error_register'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ session('error_register') }}
+                                    </div>
+                                    @endif
+                                    <form action="{{ route('register')}}" method="post">
+                                        {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label for="register-email">Your email address *</label>
-                                            <input type="email" class="form-control" id="register-email" name="register-email" required>
+                                            <label for="name">Your Name *</label>
+                                            <input type="text" class="form-control" id="name" name="name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">Your email address *</label>
+                                            <input type="email" class="form-control" id="email" name="email" required>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="register-password">Password *</label>
-                                            <input type="password" class="form-control" id="register-password" name="register-password" required>
+                                            <label for="password">Password *</label>
+                                            <input type="password" class="form-control" id="password" name="password" required>
                                         </div>
+
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                                         <div class="form-footer">
                                             <button type="submit" class="btn btn-outline-primary-2">
@@ -110,10 +128,10 @@
                                                 <i class="icon-long-arrow-right"></i>
                                             </button>
 
-                                            <div class="custom-control custom-checkbox">
+                                            {{-- <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input" id="register-policy" required>
                                                 <label class="custom-control-label" for="register-policy">I agree to the <a href="#">privacy policy</a> *</label>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </form>
 
@@ -168,7 +186,24 @@
     <!-- Main JS File -->
     <script src="{{ url('assets/js/main.js')}}"></script>
 
-    
+    <script>
+        $(document).ready(function() {
+            @if(session('error'))
+                $('#signin-modal').modal('show');
+                
+            @endif
+
+            @if(session('error_register'))
+                $('#signin-modal').modal('show');
+                $('#register-tab').tab('show');
+            @endif
+
+            @if(session('success'))
+                $('#signin-modal').modal('show');
+            @endif
+
+        });
+    </script>
 </body>
 
 

@@ -34,4 +34,10 @@ class BrandModel extends Model
         return self::find($id);
 
     }
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\BrandFactory::new();
+    }
+
 }

@@ -9,9 +9,11 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\DiscountCodeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController as ProductFront;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,14 +84,32 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/color/edit/{id}', [ColorController::class, 'update']);
     Route::get('admin/color/delete/{id}', [ColorController::class, 'delete']);
 
+    Route::get('admin/discountcode/list', [DiscountCodeController::class, 'list']);
+    Route::get('admin/discountcode/add', [DiscountCodeController::class, 'add']);
+    Route::post('admin/discountcode/add', [DiscountCodeController::class, 'insert']);
+    Route::get('admin/discountcode/edit/{id}', [DiscountCodeController::class, 'edit']);
+    Route::post('admin/discountcode/edit/{id}', [DiscountCodeController::class, 'update']);
+    Route::get('admin/discountcode/delete/{id}', [DiscountCodeController::class, 'delete']);
+
 
 });
 
 
 Route::get('/', [HomeController::class, 'home']);
+Route::post('/', [AuthController::class, 'login_user']);
+Route::get('/logout', [AuthController::class, 'logout_user']);
+Route::post('/register', [AdminController::class, 'insert_user'])->name('register');
+
+Route::group(['middleware' => 'user'], function () {
+    Route::get('/my-account', [UserController::class, 'my_account']);
+});
+
 
 Route::post('product/add_to_cart', [PaymentController::class, 'add_to_cart']);
 Route::get('cart', [PaymentController::class, 'cart']);
+Route::get('cart/remove/{id}', [PaymentController::class, 'cart_delete']);
+Route::post('cart/update', [PaymentController::class, 'cart_update']);
+Route::get('checkout', [PaymentController::class, 'checkout']);
 
 
 Route::get('search', [ProductFront::class, 'getProductSearch']);

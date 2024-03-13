@@ -182,6 +182,14 @@ class ProductModel extends Model
         return $this->belongsTo(SubCategoryModel::class, 'sub_category_id');
     }
 
+    static public function getSizeName($size_id)
+    {
+        return ProductSizeModel::getSingle($size_id);
+    }
 
+    static public function getColorName($color_id)
+    {
+        return ColorModel::getSingle($color_id);
+    }
     
 }

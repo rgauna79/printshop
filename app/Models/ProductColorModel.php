@@ -20,4 +20,6 @@ class ProductColorModel extends Model
     {
         return $this->belongsTo(ColorModel::class, 'color_id');
     }
+
+   
 }

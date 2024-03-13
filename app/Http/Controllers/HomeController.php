@@ -16,11 +16,7 @@ class HomeController extends Controller
         $data['meta_title'] =  '';
         $data['meta_description'] = '';
         $data['meta_keywords'] = '';
-
-        $cart = CartModel::getCart();
-        $data['cart'] = $cart;
-
-        
+       
         
         return view('home', $data);
     }
