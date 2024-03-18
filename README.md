@@ -11,11 +11,15 @@ Welcome to Magic Print, your one-stop destination for all your sublimation, viny
 2. [Features](#features)
 3. [Installation](#installation)
 4. [Usage](#usage)
-5. [Contributing](#contributing)
-6. [License](#license)
+5. [Customization](#customization)
+6. [Developer](#developer)
 
 ### Introduction
 Magic Print is an e-commerce application built using Laravel framework. It provides a seamless platform for users to explore and purchase various printing-related products. The application consists of both a backend control panel and a frontend interface.
+
+You can check out live demos here:
+- **Backend Control Panel:** [Live Demo](#) (username: admin, password: admin123)
+- **Frontend Interface:** [Live Demo](#)
 
 ### Features
 - **Backend Control Panel:**
@@ -86,3 +90,9 @@ To install Magic Print on your local machine using XAMPP, follow these steps:
     - Explore product categories and listings.
     - Utilize search filters to find specific products.
     - Add products to the shopping cart and proceed to checkout.
+
+### Customization
+This ecommerce app is designed to be easily configurable for other businesses. You can adapt and customize it according to your specific requirements and branding needs.
+
+### Developer
+Ecommerce was developed by Roberto Gauna.
