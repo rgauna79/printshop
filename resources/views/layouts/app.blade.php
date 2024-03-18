@@ -66,20 +66,18 @@
                             </ul>
                             <div class="tab-content" id="tab-content-5">
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                                    @if(session('error'))
-                                    <div class="alert alert-danger" role="alert">
-                                        {{ session('error') }}
-                                    </div>
+                                    @if(!empty(session('error_signin')) || !empty(session('success_email')) || !empty(session('success')))
+                                    @include('admin.layouts._message')
                                     @endif
-                                    <form action="" method="post">
+                                    <form action="{{ url('login_user') }}" method="post">
                                         {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label for="singin_email">Username or email address *</label>
+                                            <label for="singin_email">Username or email address <span style="color:red">*</span></label>
                                             <input type="text" class="form-control" id="singin_email" name="singin_email" required>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="singin_password">Password *</label>
+                                            <label for="singin_password">Password <span style="color:red">*</span></label>
                                             <input type="password" class="form-control" id="singin_password" name="singin_password" required>
                                         </div>
 
@@ -90,33 +88,31 @@
                                             </button>
 
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="signin_remember">
+                                                <input type="checkbox" class="custom-control-input" id="signin_remember" name="is_remember">
                                                 <label class="custom-control-label" for="signin_remember">Remember Me</label>
                                             </div>
-                                            <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                            <a href="{{ url('forgot_password') }}" class="forgot-link">Forgot Your Password?</a>
                                         </div>
                                     </form>
 
                                 </div>
                                 <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                    @if(session('error_register'))
-                                    <div class="alert alert-danger" role="alert">
-                                        {{ session('error_register') }}
-                                    </div>
+                                    @if(!empty(session('error_register')) || !empty(session('success_register')))
+                                    @include('admin.layouts._message')
                                     @endif
-                                    <form action="{{ route('register')}}" method="post">
+                                    <form action="{{ url('register')}}" method="post">
                                         {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label for="name">Your Name *</label>
+                                            <label for="name">Name <span style="color:red">*</span></label>
                                             <input type="text" class="form-control" id="name" name="name" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="email">Your email address *</label>
+                                            <label for="email">Your email address <span style="color:red">*</span></label>
                                             <input type="email" class="form-control" id="email" name="email" required>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="password">Password *</label>
+                                            <label for="password">Password <span style="color:red">*</span></label>
                                             <input type="password" class="form-control" id="password" name="password" required>
                                         </div>
 
@@ -188,20 +184,16 @@
 
     <script>
         $(document).ready(function() {
-            @if(session('error'))
+            @if(session('error_signin') || session('success_email')) 
                 $('#signin-modal').modal('show');
-                
             @endif
-
-            @if(session('error_register'))
+            @if(session('error_register') || session('success_register'))
                 $('#signin-modal').modal('show');
                 $('#register-tab').tab('show');
             @endif
-
-            @if(session('success'))
-                $('#signin-modal').modal('show');
+            @if(session('success_reset'))
+                alert('Your password has been reset');
             @endif
-
         });
     </script>
 </body>

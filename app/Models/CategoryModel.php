@@ -59,4 +59,11 @@ class CategoryModel extends Model
         return $this->hasMany(SubCategoryModel::class, "category_id")->where('sub_category.status','=',0)->
             where('sub_category.is_deleted','=',0);
     }
+
+    public function getProducts()
+    {
+        return $this->hasMany(ProductModel::class, "category_id")->where('product.status','=',0)->
+            where('product.is_deleted','=',0);
+    }
+
 }

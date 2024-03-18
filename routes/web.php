@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\DiscountCodeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController as ProductFront;
+use App\Http\Controllers\Admin\ShippingChargeController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -27,11 +28,10 @@ use App\Http\Controllers\UserController;
 */
 
 
-
+// Admin Routes
 Route::get('admin', [AuthController::class, 'login_admin']);
 Route::post('admin', [AuthController::class, 'auth_login_admin']);
 Route::get('admin/logout', [AuthController::class, 'logout_admin']);
-
 
 Route::group(['middleware' => 'admin'], function () {
 
@@ -91,27 +91,46 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/discountcode/edit/{id}', [DiscountCodeController::class, 'update']);
     Route::get('admin/discountcode/delete/{id}', [DiscountCodeController::class, 'delete']);
 
+    Route::get('admin/shipping_charge/list', [ShippingChargeController::class, 'list']);
+    Route::get('admin/shipping_charge/add', [ShippingChargeController::class, 'add']);
+    Route::post('admin/shipping_charge/add', [ShippingChargeController::class, 'insert']);
+    Route::get('admin/shipping_charge/edit/{id}', [ShippingChargeController::class, 'edit']);
+    Route::post('admin/shipping_charge/edit/{id}', [ShippingChargeController::class, 'update']);
+    Route::get('admin/shipping_charge/delete/{id}', [ShippingChargeController::class, 'delete']);
+
 
 });
 
-
+// User Routes
 Route::get('/', [HomeController::class, 'home']);
-Route::post('/', [AuthController::class, 'login_user']);
+
+Route::post('/register', [AuthController::class, 'insert_user'])->name('register');
+Route::get('/activate/{id}', [AuthController::class, 'activate_email']);
+
+Route::post('/login_user', [AuthController::class, 'login_user']);
 Route::get('/logout', [AuthController::class, 'logout_user']);
-Route::post('/register', [AdminController::class, 'insert_user'])->name('register');
+Route::get('/forgot_password', [AuthController::class, 'forgot_password']);
+Route::post('/forgot_password', [AuthController::class, 'user_forgot_password']);
+Route::get('reset/{token}', [AuthController::class, 'reset_password']);
+Route::post('reset/{token}', [AuthController::class, 'user_reset']);
+
+
 
 Route::group(['middleware' => 'user'], function () {
     Route::get('/my-account', [UserController::class, 'my_account']);
 });
 
 
+// Shopping Cart Routes
 Route::post('product/add_to_cart', [PaymentController::class, 'add_to_cart']);
 Route::get('cart', [PaymentController::class, 'cart']);
 Route::get('cart/remove/{id}', [PaymentController::class, 'cart_delete']);
 Route::post('cart/update', [PaymentController::class, 'cart_update']);
+
 Route::get('checkout', [PaymentController::class, 'checkout']);
+Route::post('checkout/apply_discount_code', [PaymentController::class, 'apply_discount_code']);
 
-
+// Product Search and filter Routes
 Route::get('search', [ProductFront::class, 'getProductSearch']);
 Route::post('get_filter_product_ajax', [ProductFront::class, 'getFilterProductAjax']);
 Route::get('{category?}/{subCategory?}', [ProductFront::class, 'getCategory']);

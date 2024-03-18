@@ -21,6 +21,10 @@ class UserMiddleware
             if (Auth::user()->is_admin == 0)
             {
                 return $next($request);
+            }
+            elseif (Auth::user()->is_admin == 1)
+            {
+                return $next($request);
             } 
             else
             {

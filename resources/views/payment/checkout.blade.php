@@ -10,8 +10,8 @@
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         <div class="container">
             <h1 class="page-title">Checkout<span>Shop</span></h1>
-        </div><!-- End .container -->
-    </div><!-- End .page-header -->
+        </div>
+    </div>
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
@@ -19,8 +19,8 @@
                 <li class="breadcrumb-item"><a href="#">Shop</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Checkout</li>
             </ol>
-        </div><!-- End .container -->
-    </nav><!-- End .breadcrumb-nav -->
+        </div>
+    </nav>
 
     <div class="page-content">
         <div class="checkout">
@@ -93,7 +93,7 @@
                         </div><!-- End .col-lg-9 -->
                         <aside class="col-lg-3">
                             <div class="summary">
-                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+                                <h3 class="summary-title">Your Order</h3>
 
                                 <table class="table table-summary">
                                     <thead>
@@ -130,28 +130,54 @@
                                             <td colspan="2">
                                                 <div class="cart-discount mw-100">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control  mb-0" placeholder="discount code">
+                                                        <input id="getDiscountCode"  type="text" class="form-control  mb-0" placeholder="discount code">
                                                         <div class="input-group-append h-100">
-                                                            <button  type="button" class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
+                                                            <button  id="ApplyDiscount" type="button" class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </td>
+                                            
+                                                <div class="alert alert-danger text-left" role="alert" id="getDiscountError" style="display: none" >
+                                                    <span id="getDiscountMessage"></span>
+                                                </div>
+                                            </td> 
                                         </tr>
                                         <tr>
                                             <td>Discount:</td>
-                                            <td>$0.00</td>
+                                            <td>$<span id="getDiscountAmount">{{ number_format(Cart::getTotal() - Cart::getSubTotal(), 2) }}</span></td>
                                         </tr>
-                                        <tr>
+                                        <tr class="summary-shipping">
                                             <td>Shipping:</td>
-                                            <td>Free shipping</td>
+                                            <td>&nbsp;</td>
                                         </tr>
+                                        @foreach($getShipping as $shipping)
+                                        <tr class="summary-shipping-row">
+                                            <td>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" 
+                                                            id="free-shipping{{$shipping->id}}" 
+                                                            name="shipping" 
+                                                            class="custom-control-input getShippingCharge" 
+                                                            data-price="{{ !empty($shipping->price) ? $shipping->price : 0 }}"
+                                                            value="{{ $shipping->id }}">
+                                                    <label class="custom-control-label" for="free-shipping{{$shipping->id}}">{{ $shipping->name }}</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @if($shipping->price != 0)
+                                                ${{ number_format($shipping->price, 2) }}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td>${{ number_format(Cart::getTotal(), 2) }}</td>
+                                            <td>$<span id="getPayableTotal">{{ number_format(Cart::getSubTotal(), 2) }}</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                <input type="hidden" id="getShippingChargeTotal" value="0">
+                                <input type="hidden" id="payableTotal" value="{{ Cart::getSubTotal()}}">
 
                                 <div class="accordion-summary" id="accordion-payment">
                                     <div class="card">
@@ -214,5 +240,60 @@
 @endsection
 
 @section('scripts')
+<script type="text/javascript">
 
+    $('body').on('change', '.getShippingCharge', function()  {
+        var price = $(this).data('price');
+        var total = $('#payableTotal').val();
+        var final_total = parseFloat(price) + parseFloat(total);
+
+        
+        $('#getPayableTotal').html(final_total.toFixed(2));
+        $('#getShippingChargeTotal').val(price);
+
+
+    });
+
+    $('body').on('click', '#ApplyDiscount', function()  {
+        var discount_code = $('#getDiscountCode').val();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('checkout/apply_discount_code') }}",
+            data: {
+                discount_code: discount_code,
+                _token: "{{ csrf_token() }}"
+            },
+            dataType: "json",
+            success: function(data) {
+                // Get discount amount
+                $('#getDiscountAmount').html(data.discount_amount);
+
+                // Get payable total including shipping
+                var shipping = $('#getShippingChargeTotal').val();
+                var total = parseFloat(shipping) + parseFloat(data.payable_total);
+                $('#getPayableTotal').html(total.toFixed(2));
+
+                $('#payableTotal').val(data.payable_total);
+                
+                // Hide error message
+                $('#getDiscountMessage').html('');
+                $('#getDiscountError').hide();
+                if (data.status == false) 
+                {
+                    // Show error message for 10 seconds
+                    $('#getDiscountError').show();
+                    $('#getDiscountMessage').html(data.message);
+
+                    setTimeout(function() {
+                        $('#getDiscountError').hide();
+                        $('#getDiscountCode').val('');
+                    }, 5000);
+                }
+            },
+            error: function(data) {
+            }
+        });
+    });
+
+</script>
 @endsection

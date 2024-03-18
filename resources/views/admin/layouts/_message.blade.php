@@ -16,9 +16,27 @@
     </div>
 @endif
 
+@if (!empty(session('error_signin')))
+    <div class="alert alert-danger" role="alert">
+        {{ session('error_signin') }}
+    </div>
+@endif
+
 @if (!empty(session('payment-error')))
     <div class="alert alert-success" role="alert">
         {{ session('payment-error') }}
+    </div>
+@endif
+
+@if(!empty(session('success_email')))
+    <div class="alert alert-success" role="alert">
+        {{ session('success_email') }}
+    </div>
+@endif
+
+@if(!empty(session('success_register')))
+    <div class="alert alert-success" role="alert">
+        {{ session('success-register') }}
     </div>
 @endif
 

@@ -24,26 +24,26 @@
 
             <div class="header-right">
                 <ul class="top-menu">
-                    <li>
-                        <a href="#">{{ !empty(Auth::user()) ? 'Hello ' . Auth::user()->name : 'Links' }}</a>
-                        <ul>
+                    <li style="display: flex">
+                        <a href="#" style="display: block">{{ !empty(Auth::user()) ? 'Hello ' . Auth::user()->name : 'Links' }}</a>
+                        <ul class="ml-5">
                             {{-- <li><a href="tel:#"><i class="icon-phone"></i>Call: +0123 456 789</a></li> --}}
                             
                             {{-- <li><a href="{{ url('about') }}">About Us</a></li>
                             <li><a href="{{ url('contact') }}">Contact Us</a></li> --}}
-                            @auth
-                            @if (Auth::user()->is_admin == 0)
+                            
+                            @if (!empty(Auth::check()))
                             <li><a href="{{ url('wishlist') }}"><i class="icon-heart-o"></i>My Wishlist
                                 <span>(3)</span></a></li>
                             <li><a href="{{ url('my-account') }}"><i class="icon-user"></i>My Account</a></li>
                             <li><a href="{{ url('logout') }}"><i class="icon-unlock"></i>Logout</a></li>
-                            @endif
+                            
                             @else
                             <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
-
+                            @endif
                             
 
-                            @endauth
+                            
                         </ul>
                     </li>
                 </ul>
@@ -59,9 +59,9 @@
                     <i class="icon-bars"></i>
                 </button>
 
-                <a href="{{ url('') }}" class="logo">
+                {{-- <a href="{{ url('') }}" class="logo" style="min-height: 0">
                     <img src="{{ url('assets/images/logo.png') }}" alt="" width="105" height="25">
-                </a>
+                </a> --}}
 
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">

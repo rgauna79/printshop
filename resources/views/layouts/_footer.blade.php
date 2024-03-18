@@ -1,10 +1,10 @@
-<footer class="footer footer-dark">
+<footer class="footer ">
     <div class="footer-middle">
         <div class="container">
             <div class="row">
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3 border-right">
                     <div class="widget widget-about">
-                        <img src="{{ url('assets/images/logo-footer.png') }}" class="footer-logo" alt="Footer Logo" width="105" height="25">
+                        <img src="{{ url('assets/images/logo-footer.png') }}" class="footer-logo" alt="Footer Logo" width="100%" height="25">
                         <p>Magic Print is an innovative and creative company. </p>
 
                         <div class="social-icons">
@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3 border-right">
                     <div class="widget">
                         <h4 class="widget-title">Useful Links</h4>
                         <ul class="widget-list">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3 border-right">
                     <div class="widget">
                         <h4 class="widget-title">Customer Service</h4>
 
