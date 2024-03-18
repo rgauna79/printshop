@@ -50,7 +50,7 @@ To install Magic Print on your local machine using XAMPP, follow these steps:
 
 3. Navigate to the project directory.
     ```bash
-    cd magic-print
+    cd printshop
 
 4. Install dependencies via Composer.
     ```bash
