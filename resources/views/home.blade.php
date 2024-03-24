@@ -285,7 +285,7 @@
                                     ->get();
         
                     $columnClass = 'col-6 col-lg-4';
-                    $imageClasses = ['banner-1', 'banner-4', 'banner-2', 'banner-3'];
+                    $imageClasses = ['banner-2', 'banner-3', 'banner-2', 'banner-3'];
                 @endphp
                 @foreach ($getAllCategory as $key => $category)
                 @if(!empty($category))
@@ -298,12 +298,12 @@
                         <div class="banner-content banner-content-center">
                             <h3 class="banner-title text-white"><a href="#">{{ $category->name }}</a></h3><!-- End .banner-title -->
                             <a href="{{ url($category->slug)}}" class="btn btn-outline-white banner-link">Shop Now<i class="icon-long-arrow-right"></i></a>
-                        </div><!-- End .banner-content -->
-                    </div><!-- End .banner -->
-                </div><!-- End .col-* -->
+                        </div>
+                    </div>
+                </div>
                 @endif
                 @endforeach
-            </div><!-- End .row -->
+            </div>
         </div>
 
         <div class="mb-5"></div><!-- End .mb-6 -->

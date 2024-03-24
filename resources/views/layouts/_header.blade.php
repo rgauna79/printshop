@@ -59,9 +59,9 @@
                     <i class="icon-bars"></i>
                 </button>
 
-                {{-- <a href="{{ url('') }}" class="logo" style="min-height: 0">
+                <a href="{{ url('') }}" class="logo" style="min-height: 0">
                     <img src="{{ url('assets/images/logo.png') }}" alt="" width="105" height="25">
-                </a> --}}
+                </a>
 
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
