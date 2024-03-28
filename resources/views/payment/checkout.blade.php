@@ -131,7 +131,7 @@
                                             <td colspan="2">
                                                 <div class="cart-discount mw-100">
                                                     <div class="input-group">
-                                                        <input id="getDiscountCode"  type="text" class="form-control  mb-0" placeholder="discount code">
+                                                        <input id="getDiscountCode"  name="discount_code" type="text" class="form-control  mb-0" placeholder="discount code">
                                                         <div class="input-group-append h-100">
                                                             <button  id="ApplyDiscount" type="button" class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
                                                         </div>

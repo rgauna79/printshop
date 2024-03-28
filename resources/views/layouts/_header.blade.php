@@ -128,7 +128,16 @@
                     <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false" data-display="static">
                         <i class="icon-shopping-cart"></i>
-                        <span class="cart-count"> {{ Cart::getContent()->count() }}</span>
+                        @php
+                            $userId = !empty(Auth::user()) ? Auth::user()->id : '';
+                            if ($userId != '') {
+                            $cart = Cart::session($userId);
+                                
+                            }
+                        @endphp
+                        <span class="cart-count"> 
+                            {{ Cart::getContent()->count() }}
+                        </span>
                     </a>
                     @if (!empty(Cart::getContent()->count()))
                     <div class="dropdown-menu dropdown-menu-right">

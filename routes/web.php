@@ -10,10 +10,12 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\DiscountCodeController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController as ProductFront;
 use App\Http\Controllers\Admin\ShippingChargeController;
+use App\Http\Controllers\Admin\UserInfoController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -98,6 +100,7 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/shipping_charge/edit/{id}', [ShippingChargeController::class, 'update']);
     Route::get('admin/shipping_charge/delete/{id}', [ShippingChargeController::class, 'delete']);
 
+    Route::get('admin/orders/list', [OrderController::class, 'list']);
 
 });
 
@@ -118,6 +121,8 @@ Route::post('reset/{token}', [AuthController::class, 'user_reset']);
 
 Route::group(['middleware' => 'user'], function () {
     Route::get('/my-account', [UserController::class, 'my_account']);
+    Route::get('/my-account/address', [UserInfoController::class, 'get_user_address']);
+    Route::post('/my-account/update_address', [UserInfoController::class, 'update_user_address']);
 });
 
 
