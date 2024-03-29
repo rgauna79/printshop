@@ -186,8 +186,9 @@
                                     ->withCount('getProducts')
                                     ->where('is_deleted', '=', 0)
                                     ->limit(3)
-                                    ->get();    
+                                    ->get();
                     @endphp
+                    
                     @foreach ($getCategory as $key => $category)
                     @if(!empty($category))
                     <li class="nav-item {{ $key == 0 ? 'active' : ''}}">
