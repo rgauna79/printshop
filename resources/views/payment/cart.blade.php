@@ -24,6 +24,14 @@
 
     <div class="page-content">
         <div class="cart">
+            @php
+            $userId = !empty(Auth::user()) ? Auth::user()->id : '';
+            if ($userId != '') {
+            $cart = Cart::session($userId);
+                
+            }
+            @endphp
+            
             <div class="container">
                 @if(!empty(Cart::getContent()->count()))
                 <div class="row">
@@ -42,6 +50,8 @@
                             </thead>
 
                             <tbody>
+                                
+                                @endphp
                                 @foreach (Cart::getContent() as $key => $value)
                                 @php
                                     $product = App\Models\ProductModel::getSingle($value->id);

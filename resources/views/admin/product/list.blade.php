@@ -29,6 +29,7 @@
                         </div>
                         
                         <div class="card-body p-0">
+                            <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -48,14 +49,15 @@
                                             <td>{{ $value->created_by_name }}</td>
                                             <td>{{ ($value->status == 0) ? 'Active' : 'Inactive' }}</td>
                                             <td>{{ date('m-d-Y', strtotime($value->created_at)) }}</td>
-                                            <td>
-                                                <a href="{{ url('admin/product/edit/'.$value->id)}}" class="btn btn-primary ">Edit</a>
+                                            <td class="d-flex">
+                                                <a href="{{ url('admin/product/edit/'.$value->id)}}" class="btn btn-primary mr-2">Edit</a>
                                                 <a href="{{ url('admin/product/delete/'.$value->id)}}" class="btn btn-danger ">Delete</a>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            </div>
                             <div style="padding: 10px; float: right;">
                                 {!! $getRecord->appends(Illuminate\Support\Facades\Request::except('page'))->
                                 links() !!}

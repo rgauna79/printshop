@@ -123,6 +123,7 @@ Route::group(['middleware' => 'user'], function () {
     Route::get('/my-account', [UserController::class, 'my_account']);
     Route::get('/my-account/address', [UserInfoController::class, 'get_user_address']);
     Route::post('/my-account/update_address', [UserInfoController::class, 'update_user_address']);
+    Route::post('/my-account/update_profile', [UserInfoController::class, 'update_user_profile']);
 });
 
 

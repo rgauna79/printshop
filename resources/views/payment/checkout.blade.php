@@ -95,7 +95,13 @@
                         <aside class="col-lg-3">
                             <div class="summary">
                                 <h3 class="summary-title">Your Order</h3>
-
+                                @php
+                                $userId = !empty(Auth::user()) ? Auth::user()->id : '';
+                                if ($userId != '') {
+                                $cart = Cart::session($userId);
+                                    
+                                }
+                                @endphp
                                 <table class="table table-summary">
                                     <thead>
                                         <tr>

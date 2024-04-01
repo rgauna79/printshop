@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\UserInfoModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserInfoController extends Controller
 {
@@ -69,8 +71,44 @@ class UserInfoController extends Controller
             $user->save();
 
             // return response with success message
-            return response()->json(['success' => 'User address successfully updated'], 200);
+            return redirect()->back()->with('success', 'User address successfully updated');
         }
+
+    }
+
+    function update_user_profile(Request $request)
+    {
+        $userId = auth()->user()->id;
+
+        $user = User::getSingle($userId);
+
+        if(!empty($user))
+        {
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            if($request->email != $user->email)
+            {
+                request()->validate(['email' => 'required|unique:users,email'.$user->id]);
+                $user->email = $request->email;
+            }
+            if(!empty($request->current_password))
+            {
+                if($request->new_password != $request->confirm_password)
+                {
+                    return redirect()->back()->with('error_password', 'New password and confirm password does not match');
+                }
+                if(!Hash::check($request->current_password, $user->password))
+                {
+                    return redirect()->back()->with('error_password', 'Current password is incorrect');
+                }
+                $user->password = Hash::make($request->new_password);
+            }
+            // dd($user);
+            $user->save();
+        }
+
+        return redirect()->back()->with('success_update_profile', 'User profile successfully updated');
+
 
     }
 

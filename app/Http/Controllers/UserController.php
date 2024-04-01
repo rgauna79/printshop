@@ -9,10 +9,11 @@ class UserController extends Controller
 {
     public function my_account()
     {
-        $user = UserInfoModel::getUserInfo(auth()->user()->id);
-
-
-        $data['getUserInfo'] = $user;
+        $user = auth()->user();
+        $user_info = UserInfoModel::getUserInfo(auth()->user()->id);
+        
+        $data['getUser'] = $user;
+        $data['getUserInfo'] = $user_info;
         
 
         return view('user.my_account', $data);

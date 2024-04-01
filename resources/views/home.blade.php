@@ -285,7 +285,7 @@
                                     ->where('is_deleted', '=', 0)
                                     ->get();
         
-                    $columnClass = 'col-6 col-lg-4';
+                    $columnClass = 'col-6 col-lg-4 align-self-center';
                     $imageClasses = ['banner-2', 'banner-3', 'banner-2', 'banner-3'];
                 @endphp
                 @foreach ($getAllCategory as $key => $category)
@@ -952,18 +952,18 @@
             </div><!-- End .more-container -->
         </div> --}}
 
-        <div class="cta cta-display bg-image pt-4 pb-4" style="background-image: url(assets/images/backgrounds/cta/bg-6.jpg);">
+        <div class="cta cta-display bg-image pt-4 pb-4" style="background-image: url(assets/images/backgrounds/cta/bg-2.jpg);">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-10 col-lg-9 col-xl-8">
                         <div class="row no-gutters flex-column flex-sm-row align-items-sm-center">
                             <div class="col">
-                                <h3 class="cta-title text-white">Sign up and get exclusive offers</h3><!-- End .cta-title -->
-                                <p class="cta-desc text-white">{{ config('app.name') }} have the best of sublimation printing</p><!-- End .cta-desc -->
+                                <h3 class="cta-title ">Sign up and get exclusive offers</h3><!-- End .cta-title -->
+                                <p class="cta-desc ">{{ config('app.name') }} have the best of sublimation printing</p><!-- End .cta-desc -->
                             </div>
 
                             <div class="col-auto">
-                                <a href="#signin-modal" class="btn btn-outline-white" data-toggle="modal"><span>SIGN UP</span><i class="icon-long-arrow-right"></i></a>
+                                <a href="#signin-modal" class="btn btn-outline-black" data-toggle="modal"><span>SIGN UP</span><i class="icon-long-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>

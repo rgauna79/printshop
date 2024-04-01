@@ -29,6 +29,7 @@
                         </div>
                         
                         <div class="card-body p-0">
+                            <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -48,14 +49,15 @@
                                         <td>{{ $value->price  }}</td>
                                         <td>{{ ($value->status == 0) ? 'Active' : 'Inactive' }}</td>
                                         <td>{{ date('m-d-Y', strtotime($value->created_at)) }}</td>
-                                        <td>
-                                            <a href="{{ url('admin/shipping_charge/edit/'.$value->id)}}" class="btn btn-primary ">Edit</a>
+                                        <td class="d-flex">
+                                            <a href="{{ url('admin/shipping_charge/edit/'.$value->id)}}" class="btn btn-primary mr-2">Edit</a>
                                             <a href="{{ url('admin/shipping_charge/delete/'.$value->id)}}" class="btn btn-danger ">Delete</a>
                                         </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         
                     </div>
