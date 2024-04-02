@@ -6,7 +6,7 @@
             <div class="card-body">
                 <h3 class="card-title">Billing Address</h3>
                 @include('admin.layouts._message')
-                <form action="{{ url('my-account/update_address') }}" method="POST">
+                <form id="form_address" action="{{ url('my-account/update_address') }}" method="POST">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="phone">Phone <span style="color:red">*</span></label>
@@ -81,6 +81,9 @@
 
 @section('scripts')
     <script type="text/javascript">
+
+        
+
         $(document).ready(function() {
             $.ajax({
                 type: 'GET',

@@ -78,6 +78,8 @@ class UserInfoController extends Controller
 
     function update_user_profile(Request $request)
     {
+        
+        $validate = 0;
         $userId = auth()->user()->id;
 
         $user = User::getSingle($userId);
@@ -95,19 +97,39 @@ class UserInfoController extends Controller
             {
                 if($request->new_password != $request->confirm_password)
                 {
-                    return redirect()->back()->with('error_password', 'New password and confirm password does not match');
+                    $json['success'] = false;
+                    $json['message'] = 'New password and confirm password does not match';
+                    $validate = 1;
+                    echo json_encode($json);
+                    die;
+                    // return redirect()->back()->with('error_password', 'New password and confirm password does not match');
                 }
                 if(!Hash::check($request->current_password, $user->password))
                 {
-                    return redirect()->back()->with('error_password', 'Current password is incorrect');
+                    $json['success'] = false;
+                    $json['message'] = 'Current password is incorrect';
+                    $validate = 1;
+                    echo json_encode($json);
+                    die;
+                    // return redirect()->back()->with('error_password', 'Current password is incorrect');
                 }
                 $user->password = Hash::make($request->new_password);
             }
             // dd($user);
-            $user->save();
+            if ($validate == 0)
+            {
+                $user->name= $request->name;
+                $user->save();
+                $json['success'] = true;
+                $json['message'] = 'User profile successfully updated';
+            }
+            // 
         }
+        
 
-        return redirect()->back()->with('success_update_profile', 'User profile successfully updated');
+        echo json_encode($json);
+
+        // return redirect()->back()->with('success_update_profile', 'User profile successfully updated');
 
 
     }

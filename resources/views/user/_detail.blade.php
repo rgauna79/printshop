@@ -1,5 +1,5 @@
-@include('admin.layouts._message')
-<form action="{{ url('my-account/update_profile') }}" method="POST">
+<div class="alert alert-success" style="display:none"></div>
+<form id="form_profile" action="" method="POST">
     {{ csrf_field() }}
     <div class="row">
         <div class="col-sm-6">
@@ -30,9 +30,9 @@
     </div>
 
     <div id="password_box">
+        <div class="alert alert-danger" style="display:none"></div>
         <label for="current_password">Current password (leave blank to leave unchanged)</label>
         <input id="current_password" name="current_password" type="password" class="form-control">
-
         <label for="new_password">New password (leave blank to leave unchanged)</label>
         <input id="new_password" name="new_password" type="password" class="form-control">
 
@@ -47,19 +47,46 @@
     </button>
 </form>
 
-<script>
+<script type="text/javascript">
+    
+    $('body').delegate('#form_profile','submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: "{{ url('my-account/update_profile') }}",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(data) {
+                if (data.success === true) {
+                    $('.alert-success').show();
+                    $('.alert-success').html(data.message);
+                    //clean success message and hide it after 3 seconds
+                    setTimeout(function() {
+                        $('.alert-success').hide();
+                    }, 3000);
+                    
+                }
+                else if (data.success === false) {
+                    $('.alert-danger').show();
+                    $('.alert-danger').html(data.message);
+                    //clean success message and hide it after 3 seconds
+                    setTimeout(function() {
+                        $('.alert-danger').hide();
+                    }, 3000);
+            }
+            },
+            error: function(data) {
+                
+                
+            }
+        });
+    });
+
+    
+
     $(document).ready(function() {
-        var message = "{{ session('success_update_profile') }}" || "{{ session('error_password') }}"
-
-        if (message) {
-            $('#tab-dashboard').removeClass('active');
-            $('#tab-account').tab('show');
-            //clean success message and hide it after 3 seconds
-            setTimeout(function() {
-                $('.alert-success').remove();
-            }, 3000);
-        }
-
         $('#password_box').hide();
 
         $('#confirm_password').on('keyup', function() {
@@ -72,6 +99,10 @@
         $('#change_password').on('change', function() {
             if ($(this).is(':checked')) {
                 $('#password_box').show();
+                // add required attribute to current password and new password
+                $('#current_password').prop('required', true);
+                $('#new_password').prop('required', true);
+                $('#confirm_password').prop('required', true);
             } else {
                 $('#password_box').hide();
                 // clean content of current password and new password
@@ -79,6 +110,9 @@
                 $('#new_password').val('');
                 $('#confirm_password').val('');
                 $('#message').html('');
+                $('#current_password').prop('required', false);
+                $('#new_password').prop('required', false);
+                $('#confirm_password').prop('required', false);
             }
         });
     });

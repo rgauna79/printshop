@@ -10,6 +10,7 @@ use Darryldecode\Cart\Facades\CartFacade as Cart;
 use App\Models\ProductModel;
 use App\Models\ProductSizeModel;
 use App\Models\ShippingChargeModel;
+use App\Models\UserInfoModel;
 
 class PaymentController extends Controller
 {
@@ -133,6 +134,13 @@ class PaymentController extends Controller
         $data['meta_keywords'] = '';
         $data['getShipping'] = ShippingChargeModel::getRecordActive();
 
+        // get user info
+        $userInfo = UserInfoModel::getUserInfo(auth()->user()->id);
+        if (!empty($userInfo)) {
+            $data['getUserInfo'] = $userInfo;
+            $data['getUser'] = auth()->user();
+        } 
+
         return view('payment.checkout', $data);
     }
 
@@ -141,14 +149,17 @@ class PaymentController extends Controller
         // Check if theres a user logged in and set session
         if (auth()->check()) {
             Cart::session(auth()->user()->id);
+            $userId = auth()->user()->id;
+        } else {
+            $userId = '';
         }
-        
+
         $getShipping = ShippingChargeModel::getSingle($request->shipping);
         $total = Cart::getSubTotal();
         $discount_amount = 0;
         $discount_code = '';
 
-        if(!empty($request->discount_code)){
+        if (!empty($request->discount_code)) {
             $getDiscount = DiscountCodeModel::CheckDiscount($request->discount_code);
             if (!empty($getDiscount)) {
                 $discount_code = $request->discount_code;
@@ -159,7 +170,6 @@ class PaymentController extends Controller
                     $discount_amount = $getDiscount->percent_amount;
                     $total = $total - $discount_amount;
                 }
-                
             }
         }
 
@@ -167,12 +177,8 @@ class PaymentController extends Controller
 
         $total = $total + $shippingPrice;
 
-        $userId = auth()->user()->id;
-
         $order = new OrderModel();
-        if(!empty($userId)){
-            $order->user_id = $userId;
-        }
+        $order->user_id = $userId;
         $order->first_name = trim($request->first_name);
         $order->last_name = trim($request->last_name);
         $order->company_name = trim($request->company_name);
@@ -208,5 +214,8 @@ class PaymentController extends Controller
             $order_item->total = $cart->price * $cart->quantity;
             $order_item->save();
         }
+
+        Cart::clear();
+        return redirect()->back()->with('success', "Order successfully placed");
     }
 }
