@@ -11,6 +11,10 @@ class OrderModel extends Model
 
     protected $table = 'orders';
 
+    static public function getSingle($id)
+    {
+        return self::find($id);
+    }
     static public function getRecord()
     {
         return self::select('orders.*', 'users.name as user_name', 'shipping_charge.name as shipping_name')

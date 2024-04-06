@@ -14,7 +14,7 @@
         <nav aria-label="breadcrumb" class="breadcrumb-nav">
             <div class="container">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">Shop</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Checkout</li>
                 </ol>
@@ -35,7 +35,7 @@
             <div class="checkout">
                 @include('admin.layouts._message')
                 <div class="container">
-                    <form action="{{ route('place_order') }}" method="post">
+                    <form action="" id="submitForm" method="post">
                         {{ csrf_field() }}
                         <div class="row">
                             <div class="col-lg-9">
@@ -84,7 +84,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label>Postcode / ZIP <span style="color:red">*</span></label>
-                                        <input type="text" class="form-control" name="zip_code" required>
+                                        <input value="{{ old('zip_code', !empty($getUserInfo->zip_code) ? $getUserInfo->zip_code : '') }}"  type="text" class="form-control" name="zip_code" required>
                                     </div>
 
                                     <div class="col-sm-6">
@@ -94,27 +94,28 @@
                                 </div>
 
                                 <label>Email address <span style="color:red">*</span></label>
-                                <input value="{{ old('email', !empty($getUserInfo->email) ? $getUserInfo->email : '') }}" type="email" class="form-control" name="email" required>
-
+                                <input value="{{ old('email', !empty($getUserInfo->email) ? $getUserInfo->email : '') }}" type="email" class="form-control" name="email" id="email" required>
+                                <div id="emailError" class="text-danger mb-2"></div>
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="checkout-create-acc">
+                                    <input type="checkbox" name="create_account" class="custom-control-input" id="checkout-create-acc">
                                     <label class="custom-control-label" for="checkout-create-acc">Create an account?</label>
                                 </div>
 
+                               @if(empty(Auth::check()))
                                 <div class="row" id="create-account" style="display: none">
                                     <div class="col-sm-6">
                                         <label for="checkout-acc-pass">Password <span style="color:red">*</span></label>
-                                        <input type="password" class="form-control" id="checkout-acc-pass"
+                                        <input name="password" type="password" class="form-control" id="checkout-acc-pass"
                                             placeholder="Password">
                                     </div>
                                     <div class="col-sm-6" >
                                         <label for="checkout-acc-confirm-pass">Confirm Password <span style="color:red">*</span></label>
-                                        <input type="password" class="form-control" id="checkout-acc-confirm-pass"
+                                        <input name="password_confirmation" type="password" class="form-control" id="checkout-acc-confirm-pass"
                                             placeholder="Confirm Password">
                                         <div id="passwordError"></div>
                                     </div>
                                 </div>
-
+                                @endif
                                 {{-- <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="checkout-diff-address">
                                     <label class="custom-control-label" for="checkout-diff-address">Ship to a different
@@ -267,10 +268,15 @@
         @else
             <div class="page-content">
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="alert alert-danger" role="alert">
+                    <div class="col-lg-6 text-center mt-5 ">
+                        <div class="alert alert-info" role="alert">
                             Your cart is empty
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 text-center mt-5">
+                    <a href="{{ url('/') }}" class="btn btn-outline-primary-2"><span>GO TO HOME</span><i class="icon-long-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -358,5 +364,37 @@
                 error: function(data) {}
             });
         });
+
+        $('body').delegate('#submitForm', 'submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{ url('checkout/place_order') }}",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                success: function(data) {
+                    if (data.status == true) {
+                        
+                        window.location.href = data.redirect;
+                    }
+                    else {
+                        $('#emailError').html(data.message);
+                        // place cursor to #emailError
+                        $('#email').focus();
+                        
+                        // Show error message for 10 seconds
+                        $('#emailError').show();
+                        setTimeout(function() {
+                            $('#emailError').hide();
+                        }, 5000);
+                    }
+                },
+                error: function(data) {
+                    
+                }
+            });
+        })
     </script>
 @endsection

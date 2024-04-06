@@ -136,8 +136,8 @@ Route::post('cart/update', [PaymentController::class, 'cart_update']);
 
 Route::get('checkout', [PaymentController::class, 'checkout']);
 Route::post('checkout/apply_discount_code', [PaymentController::class, 'apply_discount_code']);
-Route::post('checkout/place_order', [PaymentController::class, 'place_order'])->name('place_order');
-
+Route::post('checkout/place_order', [PaymentController::class, 'place_order']);
+Route::get('checkout/payment', [PaymentController::class, 'checkout_payment']);
 
 // Product Search and filter Routes
 Route::get('search', [ProductFront::class, 'getProductSearch']);
