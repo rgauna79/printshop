@@ -15,6 +15,8 @@ use App\Models\User;
 use App\Models\UserInfoModel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use Stripe\Stripe;
 
 class PaymentController extends Controller
 {
@@ -254,7 +256,7 @@ class PaymentController extends Controller
             // Cart::clear();
             $json['status'] = true;
             $json['message'] = "success";
-            $json['redirect'] = url('checkout/payment?order_id=' .base64_encode($order->id));
+            $json['redirect'] = url('checkout/payment?order_id=' . base64_encode($order->id));
             // return redirect()->back()->with('success', "Order successfully placed");
         } else {
 
@@ -268,46 +270,137 @@ class PaymentController extends Controller
     {
         if (auth()->check()) {
             Cart::session(auth()->user()->id);
-            $subtotal =Cart::getSubTotal();
-        }
-        else
-        {
-            $subtotal =Cart::getSubTotal();
+            $subtotal = Cart::getSubTotal();
+        } else {
+            $subtotal = Cart::getSubTotal();
         }
 
-        if(!empty($subtotal) && !empty($request->order_id))
-        {
+        if (!empty($subtotal) && !empty($request->order_id)) {
             $order_id = base64_decode($request->order_id);
             $order = OrderModel::getSingle($order_id);
-            if(!empty($order))
-            {
-                if($order->payment == 'cash')
-                {
+            if (!empty($order)) {
+                if ($order->payment == 'cash') {
                     $order->is_completed = 1;
                     $order->save();
 
                     Cart::clear();
 
                     return redirect('cart')->with('success', "Order successfully placed");
+                } else if ($order->payment == 'paypal') {
+                    $query = array();
+                    $query['cmd'] = "_xclick";
+                    $query['business'] = "sb-csnv4729508430@business.example.com";
+                    $query['currency_code'] = "USD";
+                    $query['amount'] = $order->total_amount;
+                    $query['no_shipping'] = "1";
+                    $query['item_name'] = "Magic Print Shop";
+                    $query['item_number'] = $order->id;
+                    $query['cancel_return'] = url('checkout');
+                    $query['return'] = url('paypal/success-payment');
+
+                    $query_string = http_build_query($query);
+
+
+                    header("location: https://www.sandbox.paypal.com/cgi-bin/webscr?" . $query_string);
+
+                    exit();
+                } else if ($order->payment == 'stripe') {
+                    //http://127.0.0.1:8000/checkout/payment?order_id=Mg==
+                    // dd(env('STRIPE_SECRET_KEY'));
+                    Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+                    $final_price = $order->total_amount * 100;
+
+                    $session = \Stripe\Checkout\Session::create([
+                        'customer_email' => $order->email,
+                        'payment_method_types' => ['card'],
+                        'line_items' => [[
+                            'price_data' => [
+                                'currency' => 'usd',
+                                'product_data' => [
+                                    'name' => 'Magic Print Shop',
+                                ],
+                                'unit_amount' => intval($final_price),
+                            ],
+                            'quantity' => 1,
+                        ]],
+                        'mode' => 'payment',
+                        'success_url' => url('stripe/payment-success'),
+                        'cancel_url' => url('checkout'),
+
+                    ]);
+
+                    $order->stripe_session_id = $session['id'];
+                    $order->save();
+
+                    $data['session_id'] = $session['id'];
+                    Session::put('stripe_session_id', $session['id']);
+                    $data['setPublicKey'] = env('STRIPE_PUBLISHABLE_KEY');
+
+                    return view('payment.stripe', $data);
+
+
                 }
-                else if ($order->payment == 'paypal')
-                {
-                    dd($order);
-                }
-                else if ($order->payment == 'stripe')
-                {
-                    dd($order);
-                }
-            }
-            else
-            {
+            } else {
                 abort(404);
             }
+        } else {
+            abort(404);
+        }
+    }
+
+    public function paypal_success_payment(Request $request)
+    {
+        if (auth()->check()) {
+            Cart::session(auth()->user()->id);
+        }
+
+        if (!empty($request->item_number) && !empty($request->st)) {
+            $order = OrderModel::getSingle($request->item_number);
+            if (!empty($order)) {
+                $order->is_completed = 1;
+                $order->transaction_id = $request->tx;
+                $order->payment_data = json_encode($request->all());
+                $order->save();
+
+                Cart::clear();
+                return redirect('cart')->with('success', "Order successfully placed");
+            } else {
+                abort(404);
+            }
+        } else {
+            abort(404);
+        }
+    }
+
+    public function stripe_payment_success(Request $request)
+    {
+        if (auth()->check()) {
+            Cart::session(auth()->user()->id);
+        }
+        
+        $trans_id = Session::get('stripe_session_id');
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $getData = \Stripe\Checkout\Session::retrieve($trans_id);
+
+        $getOrder = OrderModel::where('stripe_session_id', $getData->id)->first();
+        
+        
+
+        if (!empty($getOrder) && !empty($getData->id) && $getData->id == $getOrder->stripe_session_id) 
+        {
+            $getOrder->is_completed = 1;
+            $getOrder->transaction_id = $getData->id;
+            $getOrder->payment_data = json_encode($getData);
+            $getOrder->save();
+
+            Cart::clear();
+            return redirect('cart')->with('success', "Order successfully placed");
+
         }
         else
         {
-            abort(404);
-        }
+            return redirect('cart')->with('error', "Something went wrong");
 
+        }
     }
 }

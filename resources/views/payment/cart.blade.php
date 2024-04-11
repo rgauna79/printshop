@@ -49,7 +49,7 @@
 
                                         <tbody>
 
-                                            @endphp
+                                            
                                             @foreach (Cart::getContent() as $key => $value)
                                                 @php
                                                     $product = App\Models\ProductModel::getSingle($value->id);
@@ -166,7 +166,7 @@
                         <div class="page-content">
                             @include('admin.layouts._message')
                             <div class="row">
-                                <div class="col-lg-12 text-center mt-5">
+                                <div class="col-lg-12 text-center  mt-5">
                                     <div class="cart-empty alert alert-info">
                                         <p>Cart is empty!</p>
                                     </div>
