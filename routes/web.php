@@ -101,7 +101,7 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/shipping_charge/delete/{id}', [ShippingChargeController::class, 'delete']);
 
     Route::get('admin/orders/list', [OrderController::class, 'list']);
-
+    Route::get('admin/orders/detail/{id}', [OrderController::class, 'detail']);
 });
 
 // User Routes
