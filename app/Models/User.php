@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Request;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -52,6 +53,44 @@ class User extends Authenticatable
                 ->get();
     }
     
+    static public function getCustomer()
+    {
+        $return = User::select('users.*');
+        if(!empty(Request::get('id')))
+        {
+            $return = $return->where('id', '=', Request::get('id'));
+        }
+        if(!empty(Request::get('name')))
+        {
+            $return = $return->where('name', 'like', '%'.Request::get('name').'%');
+        }
+        if (!empty(Request::get('first_name')))
+        {
+            $return = $return->where('first_name', 'like', '%'.Request::get('first_name').'%');
+        }
+        if(!empty(Request::get('last_name')))
+        {
+            $return = $return->where('last_name', 'like', '%'.Request::get('last_name').'%');
+        }
+        if(!empty(Request::get('email')))
+        {
+            $return = $return->where('email', 'like', '%'.Request::get('email').'%');
+        }
+        if(!empty(Request::get('to_date')))
+        {
+            $return = $return->where('created_at', '<=', Request::get('to_date'));
+        }
+        if(!empty(Request::get('from_date')))
+        {
+            $return = $return->where('created_at', '>=', Request::get('from_date'));
+        }
+            $return = $return->where('is_admin', '=', 0)
+                ->where('is_deleted', '=', 0)
+                ->orderBy('id', 'desc')
+                ->paginate(30);
+
+        return $return;
+    }
     static public function getSingle($id)
     {
         return User::find($id);

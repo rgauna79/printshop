@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderInvoiceMail;
 use App\Mail\RegisterMail;
 use App\Models\DiscountCodeModel;
 use App\Models\OrderModel;
@@ -217,6 +218,8 @@ class PaymentController extends Controller
             if (!empty($userId)) {
                 $order->user_id = $userId;
             }
+            //save a random unique order number to order_number
+            $order->order_number = 'ORD-' . rand(10000000, 99999999);
             $order->first_name = trim($request->first_name);
             $order->last_name = trim($request->last_name);
             $order->company_name = trim($request->company_name);
@@ -283,6 +286,8 @@ class PaymentController extends Controller
                     $order->is_completed = 1;
                     $order->save();
 
+                    Mail::to($order->email)->send(new OrderInvoiceMail($order));
+                    
                     Cart::clear();
 
                     return redirect('cart')->with('success', "Order successfully placed");
@@ -305,8 +310,6 @@ class PaymentController extends Controller
 
                     exit();
                 } else if ($order->payment == 'stripe') {
-                    //http://127.0.0.1:8000/checkout/payment?order_id=Mg==
-                    // dd(env('STRIPE_SECRET_KEY'));
                     Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
                     $final_price = $order->total_amount * 100;
 
@@ -362,7 +365,10 @@ class PaymentController extends Controller
                 $order->payment_data = json_encode($request->all());
                 $order->save();
 
+                
+                Mail::to($order->email)->send(new OrderInvoiceMail($order));
                 Cart::clear();
+
                 return redirect('cart')->with('success', "Order successfully placed");
             } else {
                 abort(404);
@@ -393,6 +399,7 @@ class PaymentController extends Controller
             $getOrder->payment_data = json_encode($getData);
             $getOrder->save();
 
+            Mail::to($getOrder->email)->send(new OrderInvoiceMail($getOrder));
             Cart::clear();
             return redirect('cart')->with('success', "Order successfully placed");
 

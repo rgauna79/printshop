@@ -16,6 +16,15 @@ class AdminController extends Controller
         return view('admin.admin.list', $data);
     }
 
+
+   public function customer_list()
+   {
+       $data['getRecord'] = User::getCustomer();
+       $data['header_title'] = "Customer List";
+
+       return view('admin.customer.list', $data);
+   }
+
     public function add()
     {
         $data['header_title'] = "Add New Admin";
@@ -74,7 +83,7 @@ class AdminController extends Controller
         $user->is_deleted = 1;
         $user->save();
 
-        return redirect()->back()->with('success', "Admin successfully deleted");
+        return redirect()->back()->with('success', "Record successfully deleted");
 
     }
 }

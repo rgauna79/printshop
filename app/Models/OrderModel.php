@@ -76,6 +76,22 @@ class OrderModel extends Model
         return $return;
     }
 
+    static public function getLatestOrders()
+    {
+        return self::orderBy('id', 'desc')->take(5)->get();
+    }
+
+    static public function getTodaySales()
+    {
+        return self::whereDate('created_at', date('Y-m-d'))->sum('total_amount');
+
+    }
+
+    static public function getTodayOrders()
+    {
+        return self::whereDate('created_at', date('Y-m-d'))->count();
+
+    }
     public function getShipping()
     {
         return $this->belongsTo(ShippingChargeModel::class, 'shipping_id');

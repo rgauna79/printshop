@@ -9,7 +9,7 @@
 
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Order List ( Total:  {{ $getRecord->total() }})</h1>
+                        <h1>Order List ( Total: {{ $getRecord->total() }})</h1>
                     </div>
                 </div>
             </div>
@@ -32,80 +32,92 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Order ID</label>
-                                                <input type="text" placeholder="Order ID" class="form-control" name="order_id" value="{{ Request::get('order_id')}}">
+                                                <input type="text" placeholder="Order ID" class="form-control"
+                                                    name="order_id" value="{{ Request::get('order_id') }}">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Company Name</label>
-                                                <input type="text" placeholder="Company Name" class="form-control" name="company_name" value="{{ Request::get('company_name')}}">
+                                                <input type="text" placeholder="Company Name" class="form-control"
+                                                    name="company_name" value="{{ Request::get('company_name') }}">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>First Name</label>
-                                                <input type="text" placeholder="First Name" class="form-control" name="first_name" value="{{ Request::get('first_name')}}">
+                                                <input type="text" placeholder="First Name" class="form-control"
+                                                    name="first_name" value="{{ Request::get('first_name') }}">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Last Name</label>
-                                                <input type="text" placeholder="Last Name" class="form-control" name="last_name" value="{{ Request::get('last_name')}}">
+                                                <input type="text" placeholder="Last Name" class="form-control"
+                                                    name="last_name" value="{{ Request::get('last_name') }}">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Email</label>
-                                                <input type="text" placeholder="Email" class="form-control" name="email" value="{{ Request::get('email')}}">
+                                                <input type="text" placeholder="Email" class="form-control"
+                                                    name="email" value="{{ Request::get('email') }}">
                                             </div>
                                         </div>
 
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Phone</label>
-                                                <input type="text" placeholder="Phone" class="form-control" name="phone" value="{{ Request::get('phone')}}">
+                                                <input type="text" placeholder="Phone" class="form-control"
+                                                    name="phone" value="{{ Request::get('phone') }}">
                                             </div>
                                         </div>
 
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>City</label>
-                                                <input type="text" placeholder="City" class="form-control" name="city" value="{{ Request::get('city')}}">
+                                                <input type="text" placeholder="City" class="form-control" name="city"
+                                                    value="{{ Request::get('city') }}">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>State</label>
-                                                <input type="text" placeholder="State" class="form-control" name="state" value="{{ Request::get('state')}}">
+                                                <input type="text" placeholder="State" class="form-control"
+                                                    name="state" value="{{ Request::get('state') }}">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Country</label>
-                                                <input type="text" placeholder="Country" class="form-control" name="country" value="{{ Request::get('country')}}">
+                                                <input type="text" placeholder="Country" class="form-control"
+                                                    name="country" value="{{ Request::get('country') }}">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Zip code</label>
-                                                <input type="text" placeholder="Zip code" class="form-control" name="zip_code" value="{{ Request::get('zip_code')}}">
+                                                <input type="text" placeholder="Zip code" class="form-control"
+                                                    name="zip_code" value="{{ Request::get('zip_code') }}">
                                             </div>
                                         </div>
 
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>From Date</label>
-                                                <input type="date"  class="form-control" name="from_date" value="{{ Request::get('from_date')}}">
+                                                <input type="date" class="form-control" name="from_date"
+                                                    value="{{ Request::get('from_date') }}">
                                             </div>
                                         </div>
 
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>To Date</label>
-                                                <input type="date"  class="form-control" name="to_date" value="{{ Request::get('to_date')}}">
+                                                <input type="date" class="form-control" name="to_date"
+                                                    value="{{ Request::get('to_date') }}">
                                             </div>
                                         </div>
 
@@ -119,9 +131,10 @@
                                     </div>
                                 </div>
                             </div>
-                    </div>
-                    </form>
 
+
+                        </form>
+                    </div>
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Order List</h3>
@@ -133,6 +146,7 @@
                                     <thead>
                                         <tr class="text-nowrap">
                                             <th>#</th>
+                                            <th>Order Number</th>
                                             <th>Name</th>
                                             <th>Company Name</th>
                                             <th>Address</th>
@@ -157,6 +171,7 @@
                                         @foreach ($getRecord as $value)
                                             <tr>
                                                 <td>{{ $value->id }}</td>
+                                                <td>{{ $value->order_number }}</td>
                                                 <td>{{ $value->first_name }}</td>
                                                 <td>{{ $value->company_name }}</td>
                                                 <td>{{ $value->address_1 }} <br /> {{ $value->address_2 }}</td>
@@ -172,8 +187,21 @@
                                                 <td>{{ $value->shipping_amount }}</td>
                                                 <td>{{ $value->total_amount }}</td>
                                                 <td>{{ $value->payment }}</td>
-                                                {{-- <td>{{ ($value->status == 0) ? 'Active' : 'Inactive' }}</td> --}}
-                                                <td>{{ $value->is_completed == 1 ? 'Paid' : 'Unpaid' }}</td>
+                                                <td>
+                                                    <select class="form-control changeStatus" id="{{ $value->id }}"
+                                                        style="width: 150px;">
+                                                        <option {{ $value->status == 0 ? 'selected' : '' }}
+                                                            value="0">Pending</option>
+                                                        <option {{ $value->status == 1 ? 'selected' : '' }}
+                                                            value="1">In progress</option>
+                                                        <option {{ $value->status == 2 ? 'selected' : '' }}
+                                                            value="2">Delivered</option>
+                                                        <option {{ $value->status == 3 ? 'selected' : '' }}
+                                                            value="3">Completed</option>
+                                                        <option {{ $value->status == 4 ? 'selected' : '' }}
+                                                            value="4">Cancelled</option>
+                                                    </select>
+                                                </td>
                                                 <td>{{ date('m-d-Y', strtotime($value->created_at)) }}</td>
                                                 <td class="d-flex">
                                                     <a href="{{ url('admin/orders/detail/' . $value->id) }}"
@@ -198,4 +226,22 @@
 @endsection
 
 @section('script')
+    <script type="text/javascript">
+        $('body').delegate('.changeStatus', 'change', function(e) {
+            var order_id = $(this).attr('id');
+            var status = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "{{ url('admin/orders/order_status') }}",
+                data: {
+                    'order_id': order_id,
+                    'status': status
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    alert(data.message);
+                }
+            });
+        });
+    </script>
 @endsection

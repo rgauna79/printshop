@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\UserInfoModel;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,5 @@ class UserController extends Controller
         return view('user.my_account', $data);
     }
 
-   
 
 }
