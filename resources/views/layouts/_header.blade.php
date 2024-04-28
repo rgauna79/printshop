@@ -33,8 +33,8 @@
                             <li><a href="{{ url('contact') }}">Contact Us</a></li> --}}
                             
                             @if (!empty(Auth::check()))
-                            <li><a href="{{ url('wishlist') }}"><i class="icon-heart-o"></i>My Wishlist
-                                <span>(3)</span></a></li>
+                            <li><a href="{{ url('user/my-wishlist') }}"><i class="icon-heart-o"></i>My Wishlist
+                                <span></span></a></li>
                             <li><a href="{{ url('user/my-account') }}"><i class="icon-user"></i>My Account</a></li>
                             <li><a href="{{ url('logout') }}"><i class="icon-unlock"></i>Logout</a></li>
                             

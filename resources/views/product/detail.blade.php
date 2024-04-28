@@ -131,8 +131,10 @@
                                         <div class="details-action-wrapper">
                                             @if (!empty(Auth::check()))
                                                 <a href="javascript:;" id="{{ $getProduct->id }}"
-                                                    class="add_to_wishlist btn-product btn-wishlist" data-toggle="modal"
-                                                    title="Wishlist"><span>Add to
+                                                    class="whislist_add{{ $getProduct->id }} 
+                                                            {{ !empty($getProduct->checkWishList($getProduct->id)) ? 'btn-whishlist-add' : '' }}
+                                                    add_to_wishlist btn-product btn-wishlist"
+                                                    data-toggle="modal" title="Wishlist"><span>Add to
                                                         Wishlist</span></a>
                                             @else
                                                 <a href="#signin-modal" data-toggle="modal" class="btn-product btn-wishlist"
@@ -263,7 +265,7 @@
         </div>
 
         <div class="container">
-            <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+            <h2 class="title text-center mb-4">You May Also Like</h2>
             <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
                 data-owl-options='{
                     "nav": false, 
@@ -306,8 +308,18 @@
 
 
                             <div class="product-action-vertical">
-                                <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                        wishlist</span></a>
+                                @if (!empty(Auth::check()))
+                                    <a href="javascript:;" data-toggle="modal"
+                                        id="{{ $value->id }}"
+                                        class="add_to_wishlist whislist_add{{ $value->id }} btn-product-icon btn-wishlist {{ !empty($value->checkWishList($value->id)) ? 'btn-whishlist-add' : '' }} btn-expandable" 
+                                        title="Wishlist"><span>add to
+                                            wishlist</span></a>
+                                @else
+                                    <a href="#signin-modal" data-toggle="modal"
+                                        class="btn-product-icon btn-wishlist btn-expandable" title="Wishlist"><span>add to
+                                            wishlist</span></a>
+                                @endif
+
                             </div>
 
                         </figure>
@@ -365,21 +377,6 @@
 
         });
 
-        $('body').delegate('.add_to_wishlist', 'click', function(e) {
-            var product_id = $(this).attr('id');
-            $.ajax({
-                type: "POST",
-                url: "{{ url('user/add_to_wishlist') }}",
-                data: {
-                    product_id: product_id,
-                    _token: '{{ csrf_token() }}'
-
-                },
-                dataType: "json",
-                success: function(data) {
-
-                }
-            });
-        })
+        
     </script>
 @endsection

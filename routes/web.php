@@ -132,6 +132,7 @@ Route::group(['middleware' => 'user'], function () {
     Route::post('user/update_address', [UserInfoController::class, 'update_user_address']);
     Route::post('user/update_profile', [UserInfoController::class, 'update_user_profile']);
     Route::post('user/add_to_wishlist', [UserInfoController::class, 'add_to_wishlist']);
+    Route::get('user/my-wishlist', [ProductFront::class, 'my_wishlist']);
 });
 
 

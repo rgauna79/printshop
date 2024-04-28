@@ -157,6 +157,10 @@ class ProductModel extends Model
         return self::where('slug', '=', $slug)->count();
     }
 
+    static public function checkWishList($product_id)
+    {
+        return ProductWhishlistModel::checkProduct($product_id, auth()->user()->id);
+    }
     public function getColor()
     {
         return $this->hasMany(ProductColorModel::class, "product_id");
@@ -192,4 +196,25 @@ class ProductModel extends Model
         return ColorModel::getSingle($color_id);
     }
     
+    static public function getMyWishList($user_id)
+    {
+        $return = ProductModel::select('product.*', 
+        'users.name as created_by_name', 
+        'category.name as category_name', 
+        'category.slug as category_slug', 
+        'sub_category.name as sub_category_name', 
+        'sub_category.slug as sub_category_slug')
+        ->join('users', 'users.id', '=', 'product.created_by')
+        ->join('category', 'category.id', '=', 'product.category_id')
+        ->join('sub_category', 'sub_category.id', '=', 'product.sub_category_id')
+        ->join('product_whishlist', 'product_whishlist.product_id', '=', 'product.id')
+        ->where('product_whishlist.user_id', '=', $user_id)
+        ->where('product.is_deleted', '=', 0)
+        ->where('product.status', '=', 0)
+        ->groupBy('product.id')
+        ->orderBy('product.id','desc')
+        ->paginate(30);
+
+        return $return;
+    }
 }

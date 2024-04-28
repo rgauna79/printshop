@@ -159,4 +159,15 @@ class ProductController extends Controller
         ], 200);
 
     }
+
+    public function my_wishlist(Request $request)
+    {
+
+        $data['meta_title'] =  'Wishlist';
+        $data['meta_description'] = "";
+        $data['meta_keywords'] = "";
+        $data['getProduct'] = ProductModel::getMyWishList(auth()->user()->id);
+
+        return view('product.my_wishlist', $data);
+    }
 }

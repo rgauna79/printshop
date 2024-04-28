@@ -22,6 +22,11 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
     @yield('style')
+    <style type="text/css">
+        .btn-whishlist-add::before {
+            content: "\f233" !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -182,7 +187,7 @@
     <!-- Main JS File -->
     <script src="{{ url('assets/js/main.js')}}"></script>
 
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
             @if(session('error_signin') || session('success_email')) 
                 $('#signin-modal').modal('show');
@@ -195,6 +200,29 @@
                 alert('Your password has been reset');
             @endif
         });
+
+        $('body').delegate('.add_to_wishlist', 'click', function(e) {
+            var product_id = $(this).attr('id');
+            $.ajax({
+                type: "POST",
+                url: "{{ url('user/add_to_wishlist') }}",
+                data: {
+                    product_id: product_id,
+                    _token: '{{ csrf_token() }}'
+
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.log(data);
+                    if (data.is_wishlisted == 1) {
+                        $('.whislist_add' + product_id).addClass('btn-whishlist-add');
+                    } else {
+                        $('.whislist_add' + product_id).removeClass('btn-whishlist-add');
+                    }
+                }
+            });
+        })
+        
     </script>
 </body>
 
