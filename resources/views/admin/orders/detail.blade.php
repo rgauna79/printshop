@@ -4,7 +4,9 @@
         .form-group {
             margin-bottom: 5px;
         }
-        .table td, .table th {
+
+        .table td,
+        .table th {
             vertical-align: middle;
         }
     </style>
@@ -70,11 +72,13 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Discount Code : <span
-                                            class="font-weight-normal">{{ strtoupper($getRecord->discount_code) }}</span> </label>
+                                            class="font-weight-normal">{{ strtoupper($getRecord->discount_code) }}</span>
+                                    </label>
                                 </div>
                                 <div class="form-group">
                                     <label>Shipping Method : <span
-                                            class="font-weight-normal">{{ strtoupper($getRecord->getShipping->name) }}</span> </label>
+                                            class="font-weight-normal">{{ strtoupper($getRecord->getShipping->name) }}</span>
+                                    </label>
                                 </div>
                                 <div class="form-group">
                                     <label>Shipping Amount : <span
@@ -88,11 +92,23 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Payment Method : <span
-                                            class="font-weight-normal">{{ strtoupper($getRecord->payment) }}</span> </label>
+                                            class="font-weight-normal">{{ strtoupper($getRecord->payment) }}</span>
+                                    </label>
                                 </div>
                                 <div class="form-group">
-                                    <label>Payment Status : <span
-                                            class="font-weight-normal">{{ $getRecord->is_completed }}</span> </label>
+                                    <label>Status : <span class="font-weight-normal">
+                                            @if ($getRecord->status == 0)
+                                                Pending
+                                            @elseif($getRecord->status == 1)
+                                                Processing
+                                            @elseif($getRecord->status == 2)
+                                                Shipped
+                                            @elseif($getRecord->status == 3)
+                                                Delivered
+                                            @elseif($getRecord->status == 4)
+                                                Canceled
+                                            @endif
+                                        </span> </label>
                                 </div>
                                 <div class="form-group">
                                     <label>Created Date : <span
@@ -149,10 +165,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                {{-- <div style="padding: 10px; float: right;">
-                                {!! $getRecord->appends(Illuminate\Support\Facades\Request::except('page'))->
-                                links() !!}
-                            </div> --}}
                             </div>
 
                         </div>

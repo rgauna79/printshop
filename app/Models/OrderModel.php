@@ -16,6 +16,26 @@ class OrderModel extends Model
     {
         return self::find($id);
     }
+
+    static public function getSingleUser($userId, $orderId)
+    {
+        return self::where('user_id', '=', $userId)
+                    ->where('id', '=', $orderId)
+                    ->first();
+    }
+
+    static public function getRecordUser($userId)
+    {
+        return OrderModel::select('orders.*', 'users.name as user_name', 'shipping_charge.name as shipping_name')
+                    ->leftJoin('users', 'users.id', '=', 'orders.user_id')
+                    ->leftJoin('shipping_charge', 'shipping_charge.id', '=', 'orders.shipping_id')
+                    ->where('orders.user_id', '=', $userId)
+                    ->where('orders.is_deleted', '=', 0)
+                    ->where('orders.is_completed', '=', 1)
+                    ->orderBy('orders.id','desc')
+                    ->paginate(20);
+
+    }
     static public function getRecord()
     {
         $return =OrderModel::select('orders.*', 'users.name as user_name', 'shipping_charge.name as shipping_name')
@@ -76,15 +96,51 @@ class OrderModel extends Model
         return $return;
     }
 
+    static public function getTotalOrderMonth($start_date, $end_date)
+    {
+        return self::select('id')
+                    ->where('is_completed', '=', 1)
+                    ->where('is_deleted', '=', 0)
+                    ->whereBetween('created_at', [$start_date, $end_date])
+                    ->count();
+    }
+
+    static public function getTotalSalesMonth($start_date, $end_date)
+    {
+        return self::select('id')
+                    ->where('is_completed', '=', 1)
+                    ->where('is_deleted', '=', 0)
+                    ->whereBetween('created_at', [$start_date, $end_date])
+                    ->sum('total_amount');
+    }
+
+    static public function getTotalOrders()
+    {
+        return self::where('is_completed', '=', 1)
+                ->where('is_deleted', '=', 0)
+                ->count();
+    }
+
     static public function getLatestOrders()
     {
-        return self::orderBy('id', 'desc')->take(5)->get();
+        return self::where('is_completed', '=', 1)
+                    ->where('is_deleted', '=', 0)
+                    ->orderBy('id', 'desc')
+                    ->take(5)
+                    ->get();
     }
 
     static public function getTodaySales()
     {
         return self::whereDate('created_at', date('Y-m-d'))->sum('total_amount');
 
+    }
+
+    static public function getStartYear()
+    {
+        $minDate = self::min('created_at');
+        $start_year = date('Y', strtotime($minDate));
+        return $start_year;
     }
 
     static public function getTodayOrders()
@@ -102,4 +158,51 @@ class OrderModel extends Model
         return $this->hasMany(OrderDetailModel::class, 'order_id');
     }
 
+    //User Orders
+
+
+    static public function getTotalUserOrder($userId)
+    {
+        return self::select('id')
+                    ->where('user_id', '=', $userId)
+                    ->where('is_completed', '=', 1)
+                    ->where('is_deleted', '=', 0)
+                    ->count();
+    }
+
+    static public function getTotalUserSales($userId)
+    {
+        return self::select('id')
+                    ->where('user_id', '=', $userId)
+                    ->where('is_completed', '=', 1)
+                    ->where('is_deleted', '=', 0)
+                    ->sum('total_amount');
+    }
+
+    static public function getTodayUserOrder($userId)
+    {
+        return self::whereDate('created_at', date('Y-m-d'))
+                    ->where('user_id', '=', $userId)
+                    ->where('is_completed', '=', 1)
+                    ->where('is_deleted', '=', 0)
+                    ->count();  
+    }
+
+    static public function getInProgressUserOrder($userId)
+    {
+        return self::where('user_id', '=', $userId)
+                    ->where('is_completed', '=', 1)
+                    ->where('is_deleted', '=', 0)
+                    ->where('status', '=', 1)
+                    ->count();
+    }
+
+    static public function getPendingUserOrder($userId)
+    {
+        return self::where('user_id', '=', $userId)
+                    ->where('is_completed', '=', 1)
+                    ->where('is_deleted', '=', 0)
+                    ->where('status', '=', 0)
+                    ->count();
+    }
 }

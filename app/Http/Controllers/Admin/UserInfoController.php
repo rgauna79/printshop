@@ -11,6 +11,31 @@ use Illuminate\Support\Facades\Hash;
 class UserInfoController extends Controller
 {
 
+    public function profile()
+    {
+        $userId = auth()->user()->id;
+
+        $data['getUserInfo'] = UserInfoModel::getUserInfo($userId);
+        $data['getUser'] = auth()->user();
+        
+        $data['header_title'] = "Profile";
+
+        return view('user.detail', $data);
+
+
+    }
+
+    public function address()
+    {
+        $userId = auth()->user()->id;
+
+        $data['getUserInfo'] = UserInfoModel::getUserInfo($userId);
+        
+        $data['header_title'] = "Address";
+
+        return view('user.address', $data);
+    }
+
     public function get_user_address(Request $request)
     {
         $userId = auth()->user()->id;
@@ -132,6 +157,11 @@ class UserInfoController extends Controller
         // return redirect()->back()->with('success_update_profile', 'User profile successfully updated');
 
 
+    }
+
+    public function add_to_wishlist(Request $request)
+    {
+        dd($request->all());
     }
 
     

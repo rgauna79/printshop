@@ -25,12 +25,13 @@
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box">
-                            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-shopping-cart"></i></span>
 
+                            <span class="info-box-icon bg-info elevation-1">
+                                <a href="{{ url('admin/orders/list') }}"><i class="fas fa-shopping-cart"></i></a></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Total Orders</span>
                                 <span class="info-box-number">
-                                    {{ $getOrder->count() }}
+                                    {{ $getTotalOrders }}
                                 </span>
                             </div>
                         </div>
@@ -61,7 +62,11 @@
                     </div>
                     <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box mb-3">
-                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+                            <span class="info-box-icon bg-warning elevation-1">
+                                <a href="{{ url('admin/customer/list') }}">
+                                    <i class="fas fa-users"></i>
+                                </a>
+                            </span>
 
                             <div class="info-box-content">
                                 <span class="info-box-text">Total Customers</span>
@@ -72,7 +77,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-3 col-6">
+                    <div class="col-12 col-sm-6 col-md-3">
                         @if (!empty($getRecordUser))
                         @endif
                         <div class="small-box bg-info">
@@ -88,7 +93,7 @@
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $getRecordProduct->count() }}</h3>
@@ -102,7 +107,7 @@
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $getCategory->count() }}</h3>
@@ -116,7 +121,7 @@
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $getSubCategory->count() }}</h3>
@@ -130,7 +135,7 @@
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $getBrand->count() }}</h3>
@@ -144,7 +149,7 @@
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $getColor->count() }}</h3>
@@ -163,11 +168,55 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Latest Orders </h3>
+                            <div class="card-header border-0">
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="card-title">Sales</h3>
+                                    <select class="form-control w-25 changeYear" name="sales" id="">
+                                        @for ($i= $start_year; $i<=date('Y'); $i++)
+                                        <option {{ ($year == $i ? 'selected' : '' )}} value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
                             </div>
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">${{ $totalAmount }}</span>
+                                        <span>Sales Over Time</span>
+                                    </p>
+                                </div>
+                                <!-- /.d-flex -->
 
-                            <div class="card-body table-responsive p-0">
+                                <div class="position-relative mb-4">
+                                    <canvas id="order-chart" height="200"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                    <span class="mr-2">
+                                        <i class="fas fa-square text-primary"></i> Customers
+                                    </span>
+
+                                    <span class="mr-2">
+                                        <i class="fas fa-square text-gray"></i> Orders
+                                    </span>
+
+                                    <span class="mr-2">
+                                        <i class="fas fa-square text-danger"></i> Amount
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Latest Orders </h3>
+                                </div>
+
+                                <div class="card-body table-responsive p-0">
                                     <table class="table table-striped">
                                         <thead>
                                             <tr class="text-nowrap">
@@ -212,7 +261,7 @@
                                                     <td>{{ $value->shipping_amount }}</td> --}}
                                                     <td>{{ $value->total_amount }}</td>
                                                     <td>{{ $value->payment }}</td>
-                                                    
+
                                                     <td>{{ date('m-d-Y', strtotime($value->created_at)) }}</td>
                                                     <td class="d-flex">
                                                         <a href="{{ url('admin/orders/detail/' . $value->id) }}"
@@ -223,16 +272,105 @@
                                         </tbody>
                                     </table>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
 
-@section('script')
-    <script src="{{ url('public/assets/dist/js/pages/dashboard3.js') }}"></script>
-@endsection
+    @section('script')
+        <script src="{{ url('assets/dist/js/pages/dashboard3.js') }}"></script>
+        <script type="text/javascript">
+
+            $('.changeYear').on('change', function () {
+                var year = $(this).val();
+                window.location.href = "{{ url('admin/dashboard?year=') }}" + year;
+            });
+            
+            var ticksStyle = {
+                fontColor: '#495057',
+                fontStyle: 'bold'
+            }
+
+            var mode = 'index'
+            var intersect = true
+
+            
+
+            var $salesChart = $('#order-chart')
+            // eslint-disable-next-line no-unused-vars
+            var salesChart = new Chart($salesChart, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                            backgroundColor: '#007bff',
+                            borderColor: '#007bff',
+                            data: [{{ $getTotalCustomerMonth }}]
+                        },
+                        {
+                            backgroundColor: '#ced4da',
+                            borderColor: '#ced4da',
+                            data: [{{ $getTotalOrderMonth }}]
+                        },
+                        {
+                            // danger color
+                            backgroundColor: '#dc3545',
+                            borderColor: '#dc3545',
+                            data: [{{ $getTotalSalesMonth }}]
+                        }
+
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        mode: mode,
+                        intersect: intersect
+                    },
+                    hover: {
+                        mode: mode,
+                        intersect: intersect
+                    },
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            // display: false,
+                            gridLines: {
+                                display: true,
+                                lineWidth: '4px',
+                                color: 'rgba(0, 0, 0, .2)',
+                                zeroLineColor: 'transparent'
+                            },
+                            ticks: $.extend({
+                                beginAtZero: true,
+
+                                // Include a dollar sign in the ticks
+                                callback: function(value) {
+                                    if (value >= 1000) {
+                                        value /= 1000
+                                        value += 'k'
+                                    }
+
+                                    return '$' + value
+                                }
+                            }, ticksStyle)
+                        }],
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: ticksStyle,
+                        }]
+                    }
+                }
+            })
+        </script>
+    @endsection

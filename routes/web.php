@@ -46,7 +46,7 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/admin/edit/{id}', [AdminController::class, 'update']);
     Route::get('admin/admin/delete/{id}', [AdminController::class, 'delete']);
 
-    Route::get('admin/customer/list', [AdminController::class, 'customer_list']);
+    Route::get('admin/customer/list', [AdminController::class, 'list']);
 
     Route::get('admin/category/list', [CategoryController::class, 'list']);
     Route::get('admin/category/add', [CategoryController::class, 'add']);
@@ -123,11 +123,15 @@ Route::post('reset/{token}', [AuthController::class, 'user_reset']);
 
 
 Route::group(['middleware' => 'user'], function () {
-    Route::get('/my-account', [UserController::class, 'my_account']);
-   
-    Route::get('/my-account/address', [UserInfoController::class, 'get_user_address']);
-    Route::post('/my-account/update_address', [UserInfoController::class, 'update_user_address']);
-    Route::post('/my-account/update_profile', [UserInfoController::class, 'update_user_profile']);
+    Route::get('user/my-account', [UserController::class, 'my_account']);
+    Route::get('user/detail', [UserInfoController::class, 'profile']);
+    Route::get('user/address', [UserInfoController::class, 'address']);
+    Route::get('user/orders', [UserController::class, 'orders']);
+    Route::get('user/orders/detail/{id}', [UserController::class, 'order_detail']);
+    Route::get('user/get-user-address', [UserInfoController::class, 'get_user_address']);
+    Route::post('user/update_address', [UserInfoController::class, 'update_user_address']);
+    Route::post('user/update_profile', [UserInfoController::class, 'update_user_profile']);
+    Route::post('user/add_to_wishlist', [UserInfoController::class, 'add_to_wishlist']);
 });
 
 

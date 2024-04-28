@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('order_number')->nullable();
+            $table->string('transaction_id')->nullable();
+            $table->string('stripe_session_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
@@ -35,7 +38,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(0);
             $table->tinyInteger('is_deleted')->default(0);
             $table->tinyInteger('is_completed')->default(0);
-            $table->date('payment_date')->nullable();
+            $table->text('payment_data')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');

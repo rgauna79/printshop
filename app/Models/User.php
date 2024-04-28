@@ -91,6 +91,16 @@ class User extends Authenticatable
 
         return $return;
     }
+
+    static public function getTotalCustomerMonth($start_date, $end_date)
+    {
+        return User::where('is_admin', '=', 0)
+                ->where('is_deleted', '=', 0)
+                ->where('created_at', '>=', $start_date)
+                ->where('created_at', '<=', $end_date)
+                ->count();
+    }
+
     static public function getSingle($id)
     {
         return User::find($id);

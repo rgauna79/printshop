@@ -32,7 +32,7 @@ class AuthController extends Controller
         {
             if(!empty(Auth::user()->email_verified_at))
             {
-                return redirect(url('/'));
+                return redirect()->back()->with('success_signin', "Login successfully");
             }
             else
             {

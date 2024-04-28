@@ -119,8 +119,9 @@
                                     <div class="details-filter-row details-row-size">
                                         <label for="qty">Qty:</label>
                                         <div class="product-details-quantity">
-                                            <input name="qty" type="number" id="qty" class="form-control" value="1"
-                                                min="1" max="100" step="1" data-decimals="0" required>
+                                            <input name="qty" type="number" id="qty" class="form-control"
+                                                value="1" min="1" max="100" step="1"
+                                                data-decimals="0" required>
                                         </div>
                                     </div>
 
@@ -128,125 +129,137 @@
                                         <button type="submit" class="btn-product btn-cart">ADD TO CART</button>
 
                                         <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to
-                                                    Wishlist</span></a>
-                                            {{-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> --}}
+                                            @if (!empty(Auth::check()))
+                                                <a href="javascript:;" id="{{ $getProduct->id }}"
+                                                    class="add_to_wishlist btn-product btn-wishlist" data-toggle="modal"
+                                                    title="Wishlist"><span>Add to
+                                                        Wishlist</span></a>
+                                            @else
+                                                <a href="#signin-modal" data-toggle="modal" class="btn-product btn-wishlist"
+                                                    title="Wishlist"><span>Add to
+                                                        Wishlist</span></a>
+                                            @endif
+
                                         </div>
                                     </div>
                                 </form>
-                            <div class="product-details-footer">
-                                <div class="product-cat">
-                                    <span>Category:</span>
-                                    <a
-                                        href="{{ url($getProduct->getCategory->slug) }}">{{ $getProduct->getCategory->name }}</a>,
-                                    <a
-                                        href="{{ url($getProduct->getCategory->slug . '/' . $getProduct->getSubCategory->slug) }}">{{ $getProduct->getSubCategory->name }}</a>
+                                <div class="product-details-footer">
+                                    <div class="product-cat">
+                                        <span>Category:</span>
+                                        <a
+                                            href="{{ url($getProduct->getCategory->slug) }}">{{ $getProduct->getCategory->name }}</a>,
+                                        <a
+                                            href="{{ url($getProduct->getCategory->slug . '/' . $getProduct->getSubCategory->slug) }}">{{ $getProduct->getSubCategory->name }}</a>
 
-                                </div>
+                                    </div>
 
-                                {{-- <div class="social-icons social-icons-sm">
+                                    {{-- <div class="social-icons social-icons-sm">
                                     <span class="social-label">Share:</span>
                                     <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
                                     <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
                                     <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
                                     <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
                                 </div> --}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-details-tab product-details-extended">
-            <div class="container">
-                <ul class="nav nav-pills justify-content-center" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab"
-                            role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab"
-                            role="tab" aria-controls="product-info-tab" aria-selected="false">Additional
-                            information</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab"
-                            role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping &
-                            Returns</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab"
-                            role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel"
-                    aria-labelledby="product-desc-link">
-                    <div class="product-desc-content">
-                        <div class="container mt-2">
-                            {!! $getProduct->description !!}
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
-                    <div class="product-desc-content">
-                        <div class="container mt-2">
-                            {!! $getProduct->additional_information !!}
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel"
-                    aria-labelledby="product-shipping-link">
-                    <div class="product-desc-content">
-                        <div class="container mt-2">
-                            {!! $getProduct->shipping_returns !!}
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
-                    aria-labelledby="product-review-link">
-                    <div class="reviews">
-                        <div class="container mt-2">
-                            <h3>Reviews (2)</h3>
-                            <div class="review">
-
-                            </div>
-                        </div>
-
-                        <div class="review">
-                            <div class="row no-gutters">
-                                <div class="col-auto">
-                                    <h4><a href="#">John Doe</a></h4>
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                    <span class="review-date">5 days ago</span>
-                                </div><!-- End .col -->
-                                <div class="col">
-                                    <h4>Very good</h4>
-
-                                    <div class="review-content">
-                                        <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis
-                                            laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas iure
-                                            illum repellendus, blanditiis perspiciatis beatae!</p>
-                                    </div><!-- End .review-content -->
-
-                                    <div class="review-action">
-                                        <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
-                                        <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                    </div><!-- End .review-action -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="product-details-tab product-details-extended">
+                <div class="container">
+                    <ul class="nav nav-pills justify-content-center" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab"
+                                role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab"
+                                role="tab" aria-controls="product-info-tab" aria-selected="false">Additional
+                                information</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="product-shipping-link" data-toggle="tab"
+                                href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab"
+                                aria-selected="false">Shipping &
+                                Returns</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab"
+                                role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel"
+                        aria-labelledby="product-desc-link">
+                        <div class="product-desc-content">
+                            <div class="container mt-2">
+                                {!! $getProduct->description !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="product-info-tab" role="tabpanel"
+                        aria-labelledby="product-info-link">
+                        <div class="product-desc-content">
+                            <div class="container mt-2">
+                                {!! $getProduct->additional_information !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel"
+                        aria-labelledby="product-shipping-link">
+                        <div class="product-desc-content">
+                            <div class="container mt-2">
+                                {!! $getProduct->shipping_returns !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
+                        aria-labelledby="product-review-link">
+                        <div class="reviews">
+                            <div class="container mt-2">
+                                <h3>Reviews (2)</h3>
+                                <div class="review">
+
+                                </div>
+                            </div>
+
+                            <div class="review">
+                                <div class="row no-gutters">
+                                    <div class="col-auto">
+                                        <h4><a href="#">John Doe</a></h4>
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: 100%;"></div>
+                                                <!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                        </div><!-- End .rating-container -->
+                                        <span class="review-date">5 days ago</span>
+                                    </div><!-- End .col -->
+                                    <div class="col">
+                                        <h4>Very good</h4>
+
+                                        <div class="review-content">
+                                            <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis
+                                                laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas
+                                                iure
+                                                illum repellendus, blanditiis perspiciatis beatae!</p>
+                                        </div><!-- End .review-content -->
+
+                                        <div class="review-action">
+                                            <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
+                                            <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                        </div><!-- End .review-action -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="container">
@@ -332,7 +345,7 @@
     <script src="{{ url('assets/js/jquery.elevateZoom.min.js') }}"></script>
     <script src="{{ url('assets/js/bootstrap-input-spinner.js') }}"></script>
     <script src="{{ url('assets/js/jquery.magnific-popup.min.js') }}"></script>
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
 
             $('#size').change(function() {
@@ -351,5 +364,22 @@
             })
 
         });
+
+        $('body').delegate('.add_to_wishlist', 'click', function(e) {
+            var product_id = $(this).attr('id');
+            $.ajax({
+                type: "POST",
+                url: "{{ url('user/add_to_wishlist') }}",
+                data: {
+                    product_id: product_id,
+                    _token: '{{ csrf_token() }}'
+
+                },
+                dataType: "json",
+                success: function(data) {
+
+                }
+            });
+        })
     </script>
 @endsection

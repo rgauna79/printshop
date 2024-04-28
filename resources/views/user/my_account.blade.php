@@ -7,7 +7,7 @@
     <main class="main">
         <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
             <div class="container">
-                <h1 class="page-title">My Account<span>Shop</span></h1>
+                <h1 class="page-title">My Account</h1>
             </div>
         </div>
         <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
@@ -24,52 +24,52 @@
             <div class="dashboard">
                 <div class="container">
                     <div class="row">
-                        <aside class="col-md-4 col-lg-3">
-                            <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
-                                        href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
-                                        aria-selected="true">Dashboard</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
-                                        role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
-                                        role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account"
-                                        role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('/logout') }}">Sign Out</a>
-                                </li>
-                            </ul>
-                        </aside>
+                        @include('user._sidebar')
 
                         <div class="col-md-8 col-lg-9">
                             <div class="tab-content">
 
-                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
-                                    aria-labelledby="tab-dashboard-link">
-                                    @include('user._dashboard')
+                                <div class="row mb-3">
+                                    <p>Hello <span class="font-weight-normal text-dark">{{ Auth::user()->first_name }}</span> (not <span class="font-weight-normal text-dark">User</span>? <a href="{{ url('logout') }}">Log out</a>) 
+								    	<br>
+								    	From your account dashboard you can view your <a href="{{ url('user/orders') }}">recent orders</a>, manage your <a href="{{ url('user/address') }}" >shipping and billing addresses</a>, and <a href="{{ url('user/detail') }}" >edit your password and account details</a>.</p>
                                 </div>
+                                <div class="row" style="height: 100px">
+                                    <div class="col-12 col-sm-6 col-md-3 ">
+                                        <div class="d-flex flex-column align-items-center text-center p-4 rounded shadow h-100 justify-content-top">
+                                                <span class="font-weight-bold d-block">
+                                                    {{ $getTotalOrders }}
+                                                </span>
+                                                <span class="info-box-text">Total Orders</span>
+                                        </div>
+                                    </div>
 
-                                <div class="tab-pane fade" id="tab-orders" role="tabpanel"
-                                    aria-labelledby="tab-orders-link">
-                                    @include('user._orders')
-                                </div>
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <div class="d-flex flex-column align-items-center text-center p-4 rounded shadow h-100 justify-content-top">
+                                                <span class="font-weight-bold d-block">
+                                                    {{ $getTodayOrders }}
+                                                </span>
+                                                <span class="info-box-text">Today Orders</span>
+                                        </div>
+                                    </div>
 
-                                <div class="tab-pane fade" id="tab-address" role="tabpanel"
-                                    aria-labelledby="tab-address-link">
-                                    @include('user._address')
-                                </div>
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <div class="d-flex flex-column align-items-center text-center p-4 rounded shadow h-100 justify-content-top">
+                                                <span class="font-weight-bold d-block">
+                                                    {{ $getInProgressOrders }}
+                                                </span>
+                                                <span class="info-box-text">In Progress Orders</span>
+                                        </div>
+                                    </div>
 
-                                <div class="tab-pane fade" id="tab-account" role="tabpanel"
-                                    aria-labelledby="tab-account-link">
-                                    @include('user._detail')
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <div class="d-flex flex-column align-items-center text-center p-4 rounded shadow h-100 justify-content-top">
+                                                <span class="font-weight-bold d-block">
+                                                    {{ $getPendingOrders }}
+                                                </span>
+                                                <span class="info-box-text">Pending Orders</span>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
