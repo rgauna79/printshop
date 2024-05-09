@@ -9,9 +9,13 @@
         label {
             font-weight: bold;
         }
+
         .table td {
-            padding: 1rem;
+            padding: 0.25rem;
+            margin-right: 1rem;
+
         }
+
         .table th {
             text-align: center;
             padding: 1rem;
@@ -44,8 +48,8 @@
 
                         <div class="col-md-8 col-lg-9">
                             <div class="tab-content">
-
-                                <div class="row">
+                                @include('admin.layouts._message')
+                                <div class="row mt-2">
                                     <div class="col-md-12">
                                         {{-- Order Back button floating right --}}
                                         <div class="d-flex justify-content-end">
@@ -162,8 +166,7 @@
                                                             <th>Product Name</th>
                                                             <th>Quantity</th>
                                                             <th>Price</th>
-                                                            <th>Size</th>
-                                                            <th>Color</th>
+                                                            
                                                             <th>Total Price</th>
                                                         </tr>
                                                     </thead>
@@ -176,20 +179,45 @@
 
                                                             @endphp
                                                             <tr class="text-center">
-                                                                <td><img src="{{ $getProductImage->getImageUrl() }}"
-                                                                        width="50px" class="px-2" />
+                                                                <td class="m-3"><img
+                                                                        src="{{ $getProductImage->getImageUrl() }}"
+                                                                        width="150px" class="img-thumbnail" />
                                                                 </td>
-                                                                <td>
+                                                                <td class="text-nowrap text-left p-3">
                                                                     <a target="_blank"
                                                                         href="{{ url($value->getProduct->slug) }}">
                                                                         {{ $value->getProduct->title }}
                                                                     </a>
+                                                                    <br>
+                                                                    <b>Size:</b>
+                                                                    {{ !empty($value->getSize) ? $value->getSize->name : 'N/A' }}
+                                                                    <br>
+                                                                    <b>Color:</b> {{ $value->getColor->name }}
+                                                                    <br>
+                                                                    @if ($getRecord->status == 3)
+                                                                        @php
+                                                                            $getReview = $value->getReview(
+                                                                                $value->getProduct->id,
+                                                                                $getRecord->id,
+                                                                            );
+                                                                        @endphp
+                                                                        @if (!empty($getReview))
+                                                                            <b>Stars:</b> {{ $getReview->rating }} <br>
+                                                                            <b>Review:</b> {{ $getReview->review }}
+                                                                        @else
+                                                                            <button type="button"
+                                                                                class="btn btn-primary btn-sm MakeReview"
+                                                                                id={{ $value->getProduct->id }}
+                                                                                data-order="{{ $getRecord->id }}">
+                                                                                Make Review
+                                                                            </button>
+                                                                        @endif
+                                                                    @endif
                                                                 </td>
+
                                                                 <td>{{ $value->quantity }}</td>
                                                                 <td>{{ number_format($value->product_price, 2) }}</td>
-                                                                <td>{{ !empty($value->getSize) ? $value->getSize->name : 'N/A' }}
-                                                                </td>
-                                                                <td>{{ $value->getColor->name }}</td>
+                                                                
                                                                 <td>{{ number_format($value->total, 2) }}</td>
                                                             </tr>
                                                         @endforeach
@@ -208,9 +236,71 @@
             </div>
         </div>
     </main>
+
+    <!-- Modal -->
+    <div class="modal fade" id="makeReviewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Product Review</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url('user/make-review') }}" method="POST">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="order_id" id="order_id" required>
+                        <input type="hidden" name="product_id" id="product_id" required>
+                        <div class="row justify-content-center px-3 mt-3">
+                            <div class="col-md-6 text-center">
+                                <div class="form-group">
+                                    <label for="">How many stars?</label>
+                                    <select class="form-control" name="rating" id="rating" required>
+                                        <option value="">Select</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center px-3 ">
+                            <div class="col-md-12 text-center ">
+                                <div class="form-group">
+                                    <label for="">Review</label>
+                                    <textarea class="form-control" name="review" id="review" cols="30" rows="5"
+                                        placeholder="Enter your comment..." required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endSection
 
 
 @section('scripts')
-    <script></script>
+    <script type="text/javascript">
+        $('body').delegate('.MakeReview', 'click', function(e) {
+            e.preventDefault();
+            var product_id = $(this).attr('id');
+            var order_id = $(this).attr('data-order');
+            $('#order_id').val(order_id);
+            $('#product_id').val(product_id);
+
+            $('#makeReviewModal').modal('show');
+
+        })
+    </script>
 @endsection

@@ -186,6 +186,25 @@ class ProductModel extends Model
         return $this->belongsTo(SubCategoryModel::class, 'sub_category_id');
     }
 
+    public function getTotalReview()
+    {
+        return $this->hasMany(ProductReviewModel::class, "product_id")
+                    ->join('users', 'users.id', '=', 'product_review.user_id')
+                    ->count();
+    }
+
+    public function getTotalReviewProduct($product_id)
+    {
+        return ProductReviewModel::where('product_id', '=', $product_id)->count();
+    }
+
+    public function getAverageReview($product_id)
+    {
+        $average = ProductReviewModel::getAverage($product_id);
+
+        return $average;
+    }
+
     static public function getSizeName($size_id)
     {
         return ProductSizeModel::getSingle($size_id);
@@ -217,4 +236,6 @@ class ProductModel extends Model
 
         return $return;
     }
+
+
 }

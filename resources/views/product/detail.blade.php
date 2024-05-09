@@ -65,9 +65,10 @@
 
                                 <div class="ratings-container">
                                     <div class="ratings">
-                                        <div class="ratings-val" style="width: 80%;"></div>
+                                        <div class="ratings-val" style="width: {{ $getProduct->getAverageReview($getProduct->id) * 20 }}%;"></div>
                                     </div>
-                                    <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
+                                    <a class="ratings-text" href="#product-review-link" id="review-link">(
+                                        {{ $getProduct->getTotalReview() }} Reviews )</a>
                                 </div>
 
                                 <div class="product-price">
@@ -189,7 +190,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab"
-                                role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
+                                role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews
+                                ({{ $getProduct->getTotalReview() }})</a>
                         </li>
                     </ul>
                 </div>
@@ -223,41 +225,46 @@
                         aria-labelledby="product-review-link">
                         <div class="reviews">
                             <div class="container mt-2">
-                                <h3>Reviews (2)</h3>
+                                <h3>Reviews ({{ $getProduct->getTotalReview() }})</h3>
                                 <div class="review">
-
                                 </div>
                             </div>
+                            @foreach ($getReview as $review)
+                                <div class="review">
+                                    <div class="row no-gutters">
 
-                            <div class="review">
-                                <div class="row no-gutters">
-                                    <div class="col-auto">
-                                        <h4><a href="#">John Doe</a></h4>
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div>
-                                                <!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
-                                        </div><!-- End .rating-container -->
-                                        <span class="review-date">5 days ago</span>
-                                    </div><!-- End .col -->
-                                    <div class="col">
-                                        <h4>Very good</h4>
 
-                                        <div class="review-content">
-                                            <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis
-                                                laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas
-                                                iure
-                                                illum repellendus, blanditiis perspiciatis beatae!</p>
-                                        </div><!-- End .review-content -->
 
-                                        <div class="review-action">
-                                            <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
-                                            <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                        </div><!-- End .review-action -->
+                                        <div class="col-auto">
+                                            <h4><a href="#">{{ $review->name }}</a></h4>
+                                            <div class="ratings-container">
+                                                <div class="ratings">
+                                                    <div class="ratings-val"
+                                                        style="width: {{ $review->getPercent() }}%;"></div>
+                                                </div>
+                                            </div>
+                                            <span class="review-date">
+                                                {{ Carbon\Carbon::parse($review->created_at)->diffForHumans() }}
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            {{-- <h4>Very good</h4> --}}
+
+                                            <div class="review-content">
+                                                <p>{{ $review->review }}</p>
+                                            </div>
+
+                                            <div class="review-action">
+                                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
+                                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
-                            </div>
+                            @endforeach
+                            {!! $getReview->appends(Illuminate\Support\Facades\Request::except('page'))->links() !!}
                         </div>
                     </div>
                 </div>
@@ -309,9 +316,8 @@
 
                             <div class="product-action-vertical">
                                 @if (!empty(Auth::check()))
-                                    <a href="javascript:;" data-toggle="modal"
-                                        id="{{ $value->id }}"
-                                        class="add_to_wishlist whislist_add{{ $value->id }} btn-product-icon btn-wishlist {{ !empty($value->checkWishList($value->id)) ? 'btn-whishlist-add' : '' }} btn-expandable" 
+                                    <a href="javascript:;" data-toggle="modal" id="{{ $value->id }}"
+                                        class="add_to_wishlist whislist_add{{ $value->id }} btn-product-icon btn-wishlist {{ !empty($value->checkWishList($value->id)) ? 'btn-whishlist-add' : '' }} btn-expandable"
                                         title="Wishlist"><span>add to
                                             wishlist</span></a>
                                 @else
@@ -336,9 +342,9 @@
                             </div>
                             <div class="ratings-container">
                                 <div class="ratings">
-                                    <div class="ratings-val" style="width: 20%;"></div>
+                                    <div class="ratings-val" style="width: {{ $getProduct->getAverageReview($value->id) * 20 }}%;"></div>
                                 </div>
-                                <span class="ratings-text">( 2 Reviews )</span>
+                                <span class="ratings-text">( {{ $getProduct->getTotalReviewProduct($value->id) }} Reviews )</span>
                             </div>
                         </div>
                     </div>
@@ -376,7 +382,5 @@
             })
 
         });
-
-        
     </script>
 @endsection

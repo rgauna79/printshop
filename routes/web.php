@@ -123,6 +123,7 @@ Route::post('reset/{token}', [AuthController::class, 'user_reset']);
 
 
 Route::group(['middleware' => 'user'], function () {
+    
     Route::get('user/my-account', [UserController::class, 'my_account']);
     Route::get('user/detail', [UserInfoController::class, 'profile']);
     Route::get('user/address', [UserInfoController::class, 'address']);
@@ -131,8 +132,11 @@ Route::group(['middleware' => 'user'], function () {
     Route::get('user/get-user-address', [UserInfoController::class, 'get_user_address']);
     Route::post('user/update_address', [UserInfoController::class, 'update_user_address']);
     Route::post('user/update_profile', [UserInfoController::class, 'update_user_profile']);
+    
     Route::post('user/add_to_wishlist', [UserInfoController::class, 'add_to_wishlist']);
     Route::get('user/my-wishlist', [ProductFront::class, 'my_wishlist']);
+    
+    Route::post('user/make-review', [UserInfoController::class, 'make_review']);
 });
 
 

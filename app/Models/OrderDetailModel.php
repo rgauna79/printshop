@@ -25,4 +25,9 @@ class OrderDetailModel extends Model
     {
         return $this->belongsTo(ProductSizeModel::class, 'product_size_id');
     }
+
+    public function getReview($product_id, $order_id)
+    {
+        return ProductReviewModel::getReview($product_id, $order_id, auth()->user()->id);
+    }
 }

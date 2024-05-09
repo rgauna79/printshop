@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProductReviewModel;
 use App\Models\ProductWhishlistModel;
 use App\Models\User;
 use App\Models\UserInfoModel;
@@ -162,6 +163,20 @@ class UserInfoController extends Controller
         $json['status'] = true;
 
         echo json_encode($json);
+    }
+
+    public function make_review(Request $request)
+    {
+        $save = new ProductReviewModel(); 
+        $save->user_id = auth()->user()->id;
+        $save->order_id = trim($request->order_id);
+        $save->product_id = trim($request->product_id);
+        $save->review = trim($request->review);
+        $save->rating = trim($request->rating);
+        $save->save();
+
+        return redirect()->back()->with('success', 'Thank you for your review');
+
     }
 
 }

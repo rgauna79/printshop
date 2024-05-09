@@ -8,6 +8,7 @@ use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\SubCategoryModel;
 use App\Models\ColorModel;
+use App\Models\ProductReviewModel;
 use Illuminate\Http\Request;
 
 
@@ -61,6 +62,7 @@ class ProductController extends Controller
             $data['meta_description'] = $getProductSingle->short_description;
             $data['getProduct'] = $getProductSingle;
             $data['getRelatedProduct'] = ProductModel::getRelatedProduct($getProductSingle->id, $getProductSingle->sub_category_id);
+            $data['getReview'] = ProductReviewModel::getReviewProduct($getProductSingle->id);
 
             return view('product.detail', $data);
         }
